@@ -8,7 +8,7 @@ public final class AppConstants {
 
     public static final int APP_HEIGHT = 768;
 
-    public static final String SERVER_URL = "http://localhost:8080"; //"https://raze-server.herokuapp.com"; //
+    public static final String SERVER_URL = "http://localhost:8080"; //"https://raze-server.herokuapp.com";
 
     public static final float SERVER_UPDATE_RATE = 1/30f;
 

@@ -27,6 +27,8 @@ import java.util.Objects;
 
 public class ArenaScreen implements Screen {
 
+    private static final int MOVEMENT_SPEED = 250;
+
     private final RazeGame game;
 
     private final OrthographicCamera camera;
@@ -61,8 +63,8 @@ public class ArenaScreen implements Screen {
         ScreenUtils.clear(1, 1, 1, 1);
 
         //Update
-        updateCamera(delta);
         updateServer(delta);
+        updateCamera(delta);
         updateCharacters(delta);
 
         //Draw
@@ -82,9 +84,10 @@ public class ArenaScreen implements Screen {
         if (Objects.nonNull(player)) {
             inputHandler.handleInput(delta);
             player.update(delta);
-        }
-        for (Map.Entry<String, Character> characterEntry : connectedPlayers.entrySet()) {
-            characterEntry.getValue().update(delta);
+
+            for (Map.Entry<String, Character> characterEntry : connectedPlayers.entrySet()) {
+                characterEntry.getValue().update(delta);
+            }
         }
     }
 
@@ -104,7 +107,7 @@ public class ArenaScreen implements Screen {
 
     private void updateServer(float delta) {
         timeSinceLastServerUpdate += delta;
-        if (timeSinceLastServerUpdate >= AppConstants.SERVER_UPDATE_RATE && Objects.nonNull(player) && player.isDirty()) {
+        if (timeSinceLastServerUpdate >= AppConstants.SERVER_UPDATE_RATE && Objects.nonNull(player)) {
             try {
                 JSONObject playerData = new JSONObject();
                 playerData.put("x", player.getX());
@@ -112,6 +115,7 @@ public class ArenaScreen implements Screen {
                 playerData.put("flipX", player.isFlipX());
                 playerData.put("state", player.getState().name());
                 socket.emit(SocketEventConstants.PLAYER_MOVED, playerData);
+                timeSinceLastServerUpdate = 0f;
             } catch (Exception e) {
                 Gdx.app.error(AppConstants.SOCKET_IO_LOG_TAG, "Error while updating server" , e);
             }
@@ -151,7 +155,8 @@ public class ArenaScreen implements Screen {
                 Gdx.app.log(AppConstants.SOCKET_IO_LOG_TAG, "New player connected. Player ID : " + id);
                 Gdx.app.postRunnable(() ->
                         connectedPlayers.put(id,
-                                new Character(textureConfigFactory.getTextureConfigForCharacter(CharacterType.ELF_WARRIOR))));
+                                new Character(textureConfigFactory.getTextureConfigForCharacter(CharacterType.ELF_WARRIOR),
+                                        new Vector2(camera.viewportWidth, camera.viewportHeight), false)));
             } catch (Exception e) {
                 Gdx.app.error(AppConstants.SOCKET_IO_LOG_TAG, "Error while getting new player id", e);
             }

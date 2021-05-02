@@ -61,23 +61,16 @@ public class Character implements Disposable {
         this.canMove = true;
     }
 
-    public boolean isDirty() {
-        boolean isDirty = false;
+    public void update(final float deltaTime) {
+        elapsedTime += deltaTime;
         if (previousPosition.x != getX() || previousPosition.y != getY()) {
             previousPosition.x = getX();
             previousPosition.y = getY();
-            isDirty = true;
         }
         if (state != previousState) {
             elapsedTime = 0.0f;
             previousState = state;
-            isDirty = true;
         }
-        return isDirty;
-    }
-
-    public void update(final float deltaTime) {
-        elapsedTime += deltaTime;
         if (State.ATTACKING.equals(state)) {
             canMove = stateRegionMap.get(state).isAnimationFinished(elapsedTime);
         }
