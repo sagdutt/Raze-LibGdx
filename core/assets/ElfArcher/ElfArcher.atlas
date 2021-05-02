@@ -1,0 +1,392 @@
+
+ElfArcher.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+Elf_01__DIE
+  rotate: false
+  xy: 2, 217
+  size: 1000, 266
+  orig: 1000, 525
+  offset: 0, 106
+  index: 4
+Elf_01__DIE
+  rotate: false
+  xy: 2, 2
+  size: 1000, 213
+  orig: 1000, 525
+  offset: 0, 124
+  index: 6
+Elf_01__DIE
+  rotate: false
+  xy: 1004, 35
+  size: 1000, 186
+  orig: 1000, 525
+  offset: 0, 133
+  index: 7
+Elf_01__RUN
+  rotate: false
+  xy: 2, 754
+  size: 1000, 267
+  orig: 1000, 525
+  offset: 0, 104
+  index: 3
+Elf_01__RUN
+  rotate: false
+  xy: 2, 485
+  size: 1000, 267
+  orig: 1000, 525
+  offset: 0, 104
+  index: 7
+Elf_01__RUN
+  rotate: false
+  xy: 1004, 755
+  size: 1000, 266
+  orig: 1000, 525
+  offset: 0, 104
+  index: 6
+Elf_01__RUN
+  rotate: false
+  xy: 1004, 487
+  size: 1000, 266
+  orig: 1000, 525
+  offset: 0, 104
+  index: 4
+Elf_01__RUN
+  rotate: false
+  xy: 1004, 223
+  size: 1000, 262
+  orig: 1000, 525
+  offset: 0, 110
+  index: 8
+
+ElfArcher2.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+Elf_01__DIE
+  rotate: false
+  xy: 2, 822
+  size: 1000, 185
+  orig: 1000, 525
+  offset: 0, 123
+  index: 9
+Elf_01__DIE
+  rotate: false
+  xy: 2, 822
+  size: 1000, 185
+  orig: 1000, 525
+  offset: 0, 123
+  index: 8
+Elf_01__DIE
+  rotate: false
+  xy: 1004, 761
+  size: 1000, 246
+  orig: 1000, 525
+  offset: 0, 112
+  index: 5
+Elf_01__HURT
+  rotate: false
+  xy: 2, 569
+  size: 1000, 251
+  orig: 1000, 525
+  offset: 0, 108
+  index: 8
+Elf_01__HURT
+  rotate: false
+  xy: 1004, 508
+  size: 1000, 251
+  orig: 1000, 525
+  offset: 0, 108
+  index: 2
+Elf_01__HURT
+  rotate: false
+  xy: 2, 316
+  size: 1000, 251
+  orig: 1000, 525
+  offset: 0, 107
+  index: 7
+Elf_01__HURT
+  rotate: false
+  xy: 1004, 255
+  size: 1000, 251
+  orig: 1000, 525
+  offset: 0, 106
+  index: 4
+Elf_01__HURT
+  rotate: false
+  xy: 2, 63
+  size: 1000, 251
+  orig: 1000, 525
+  offset: 0, 106
+  index: 6
+Elf_01__HURT
+  rotate: false
+  xy: 1004, 2
+  size: 1000, 251
+  orig: 1000, 525
+  offset: 0, 107
+  index: 3
+
+ElfArcher3.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+Elf_01__ATTACK
+  rotate: false
+  xy: 2, 264
+  size: 1000, 261
+  orig: 1000, 525
+  offset: 0, 109
+  index: 8
+Elf_01__ATTACK
+  rotate: false
+  xy: 1004, 528
+  size: 1000, 261
+  orig: 1000, 525
+  offset: 0, 108
+  index: 6
+Elf_01__ATTACK
+  rotate: false
+  xy: 2, 2
+  size: 1000, 260
+  orig: 1000, 525
+  offset: 0, 108
+  index: 5
+Elf_01__ATTACK
+  rotate: false
+  xy: 1004, 266
+  size: 1000, 260
+  orig: 1000, 525
+  offset: 0, 109
+  index: 7
+Elf_01__ATTACK
+  rotate: false
+  xy: 1004, 4
+  size: 1000, 260
+  orig: 1000, 525
+  offset: 0, 107
+  index: 4
+Elf_01__RUN
+  rotate: false
+  xy: 2, 527
+  size: 1000, 262
+  orig: 1000, 525
+  offset: 0, 110
+  index: 2
+
+ElfArcher4.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+Elf_01__ATTACK
+  rotate: false
+  xy: 1004, 526
+  size: 1000, 260
+  orig: 1000, 525
+  offset: 0, 107
+  index: 3
+Elf_01__ATTACK
+  rotate: false
+  xy: 1004, 265
+  size: 1000, 259
+  orig: 1000, 525
+  offset: 0, 107
+  index: 2
+Elf_01__DIE
+  rotate: false
+  xy: 2, 526
+  size: 1000, 260
+  orig: 1000, 525
+  offset: 0, 103
+  index: 3
+Elf_01__DIE
+  rotate: false
+  xy: 1004, 4
+  size: 1000, 259
+  orig: 1000, 525
+  offset: 0, 104
+  index: 1
+Elf_01__RUN
+  rotate: false
+  xy: 2, 264
+  size: 1000, 260
+  orig: 1000, 525
+  offset: 0, 112
+  index: 9
+Elf_01__RUN
+  rotate: false
+  xy: 2, 2
+  size: 1000, 260
+  orig: 1000, 525
+  offset: 0, 112
+  index: 1
+
+ElfArcher5.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+Elf_01__ATTACK
+  rotate: false
+  xy: 2, 523
+  size: 1000, 259
+  orig: 1000, 525
+  offset: 0, 110
+  index: 9
+Elf_01__ATTACK
+  rotate: false
+  xy: 2, 262
+  size: 1000, 259
+  orig: 1000, 525
+  offset: 0, 108
+  index: 1
+Elf_01__ATTACK
+  rotate: false
+  xy: 2, 2
+  size: 1000, 258
+  orig: 1000, 525
+  offset: 0, 110
+  index: 0
+Elf_01__DIE
+  rotate: false
+  xy: 1004, 4
+  size: 1000, 258
+  orig: 1000, 525
+  offset: 0, 110
+  index: 0
+Elf_01__HURT
+  rotate: false
+  xy: 1004, 524
+  size: 1000, 258
+  orig: 1000, 525
+  offset: 0, 110
+  index: 0
+Elf_01__IDLE
+  rotate: false
+  xy: 1004, 524
+  size: 1000, 258
+  orig: 1000, 525
+  offset: 0, 110
+  index: 0
+Elf_01__IDLE
+  rotate: false
+  xy: 1004, 264
+  size: 1000, 258
+  orig: 1000, 525
+  offset: 0, 110
+  index: 9
+Elf_01__IDLE
+  rotate: false
+  xy: 1004, 264
+  size: 1000, 258
+  orig: 1000, 525
+  offset: 0, 110
+  index: 1
+
+ElfArcher6.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+Elf_01__DIE
+  rotate: false
+  xy: 2, 519
+  size: 1000, 257
+  orig: 1000, 525
+  offset: 0, 101
+  index: 2
+Elf_01__HURT
+  rotate: false
+  xy: 1004, 5
+  size: 1000, 255
+  orig: 1000, 525
+  offset: 0, 109
+  index: 9
+Elf_01__IDLE
+  rotate: false
+  xy: 1004, 519
+  size: 1000, 257
+  orig: 1000, 525
+  offset: 0, 110
+  index: 8
+Elf_01__IDLE
+  rotate: false
+  xy: 1004, 519
+  size: 1000, 257
+  orig: 1000, 525
+  offset: 0, 110
+  index: 2
+Elf_01__IDLE
+  rotate: false
+  xy: 2, 2
+  size: 1000, 256
+  orig: 1000, 525
+  offset: 0, 110
+  index: 7
+Elf_01__IDLE
+  rotate: false
+  xy: 2, 2
+  size: 1000, 256
+  orig: 1000, 525
+  offset: 0, 110
+  index: 3
+Elf_01__IDLE
+  rotate: false
+  xy: 1004, 262
+  size: 1000, 255
+  orig: 1000, 525
+  offset: 0, 110
+  index: 4
+Elf_01__IDLE
+  rotate: false
+  xy: 1004, 262
+  size: 1000, 255
+  orig: 1000, 525
+  offset: 0, 110
+  index: 6
+Elf_01__RUN
+  rotate: false
+  xy: 2, 260
+  size: 1000, 257
+  orig: 1000, 525
+  offset: 0, 112
+  index: 5
+
+ElfArcher7.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+Elf_01__HURT
+  rotate: false
+  xy: 2, 513
+  size: 1000, 255
+  orig: 1000, 525
+  offset: 0, 109
+  index: 1
+Elf_01__HURT
+  rotate: false
+  xy: 2, 2
+  size: 1000, 252
+  orig: 1000, 525
+  offset: 0, 105
+  index: 5
+Elf_01__IDLE
+  rotate: false
+  xy: 2, 256
+  size: 1000, 255
+  orig: 1000, 525
+  offset: 0, 110
+  index: 5
+Elf_01__RUN
+  rotate: false
+  xy: 1004, 515
+  size: 1000, 253
+  orig: 1000, 525
+  offset: 0, 120
+  index: 0

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.RazeGame;
@@ -32,6 +33,8 @@ public class ArenaScreen implements Screen {
 
     private final Map<String, Character> connectedPlayers;
 
+    private final Texture background;
+
     private Character player;
 
     private Socket socket;
@@ -44,6 +47,7 @@ public class ArenaScreen implements Screen {
         camera.setToOrtho(false, AppConstants.APP_WIDTH, AppConstants.APP_HEIGHT);
         textureConfigFactory = new TextureConfigFactory();
         connectedPlayers = new HashMap<>();
+        background = new Texture("Background/game_background_4.png");
         connectSocket();
         configureSocketEvents();
     }
@@ -53,6 +57,16 @@ public class ArenaScreen implements Screen {
         ScreenUtils.clear(1, 1, 1, 1);
 
         //Update
+        if (Objects.nonNull(player)) {
+            float nextX = player.getX() + (player.getTextureSize().x / 2);
+            if (nextX - (camera.viewportWidth / 2) > 0 && nextX + (camera.viewportWidth / 2) < background.getWidth()) {
+                camera.position.x = nextX;
+            }
+            float nextY = player.getY() + (player.getTextureSize().y / 2);
+            if (nextY - (camera.viewportHeight/2) > 0 && nextY + (camera.viewportHeight/2) < background.getHeight()) {
+                camera.position.y = nextY;
+            }
+        }
         camera.update();
         updateServer(delta);
         if (Objects.nonNull(player)) {
@@ -66,10 +80,11 @@ public class ArenaScreen implements Screen {
         //Draw
         game.getBatch().setProjectionMatrix(camera.combined);
         game.getBatch().begin();
-        for (Map.Entry<String, Character> characterEntry : connectedPlayers.entrySet()) {
-            characterEntry.getValue().draw(game.getBatch());
-        }
         if (Objects.nonNull(player)) {
+            game.getBatch().draw(background, 0, 0);
+            for (Map.Entry<String, Character> characterEntry : connectedPlayers.entrySet()) {
+                characterEntry.getValue().draw(game.getBatch());
+            }
             player.draw(game.getBatch());
         }
         game.getBatch().end();
@@ -111,21 +126,29 @@ public class ArenaScreen implements Screen {
         if (player.isCanMove()) {
             boolean isMoving = false;
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                player.setX(player.getX() + (-200 * deltaTime));
+                if (player.getX() + (-200 * deltaTime) > 0) {
+                    player.setX(player.getX() + (-200 * deltaTime));
+                }
                 player.setFlipX(true);
                 isMoving = true;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                player.setX(player.getX() + (200 * deltaTime));
+                if (player.getX() + player.getTextureSize().x + (200 * deltaTime) < background.getWidth()) {
+                    player.setX(player.getX() + (200 * deltaTime));
+                }
                 player.setFlipX(false);
                 isMoving = true;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                player.setY(player.getY() + (200 * deltaTime));
+                if (player.getY() + player.getTextureSize().y + (200 * deltaTime) < background.getHeight()) {
+                    player.setY(player.getY() + (200 * deltaTime));
+                }
                 isMoving = true;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                player.setY(player.getY() + (-200 * deltaTime));
+                if (player.getY() + (-200 * deltaTime) > 0) {
+                    player.setY(player.getY() + (-200 * deltaTime));
+                }
                 isMoving = true;
             }
 
@@ -167,7 +190,8 @@ public class ArenaScreen implements Screen {
         socket.on(SocketEventConstants.CONNECT, args -> {
             Gdx.app.log("SocketIO", "Connected");
             Gdx.app.postRunnable(() ->
-                    player = new Character(textureConfigFactory.getTextureConfigForCharacter(CharacterType.ELF_WARRIOR)));
+                    player = new Character(textureConfigFactory.getTextureConfigForCharacter(CharacterType.ELF_WARRIOR),
+                            new Vector2(camera.viewportWidth, camera.viewportHeight), false));
         }).on(SocketEventConstants.SOCKET_ID, args -> {
             JSONObject data = (JSONObject) args[0];
             try {

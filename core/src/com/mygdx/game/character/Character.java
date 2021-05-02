@@ -116,6 +116,10 @@ public class Character implements Disposable {
         return canMove;
     }
 
+    public Vector2 getTextureSize() {
+        return textureSize;
+    }
+
     public void setX(final float x) {
         position.x = x;
     }
