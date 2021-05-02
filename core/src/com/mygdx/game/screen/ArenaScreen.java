@@ -14,6 +14,8 @@ import com.mygdx.game.constant.CharacterType;
 import com.mygdx.game.constant.SocketEventConstants;
 import com.mygdx.game.constant.State;
 import com.mygdx.game.factory.TextureConfigFactory;
+import com.mygdx.game.input.ArenaInputHandler;
+import com.mygdx.game.input.InputHandler;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import org.json.JSONArray;
@@ -41,6 +43,8 @@ public class ArenaScreen implements Screen {
 
     private float timeSinceLastServerUpdate = 0.0f;
 
+    private InputHandler inputHandler;
+
     public ArenaScreen(final RazeGame game) {
         this.game = game;
         camera = new OrthographicCamera();
@@ -57,25 +61,9 @@ public class ArenaScreen implements Screen {
         ScreenUtils.clear(1, 1, 1, 1);
 
         //Update
-        if (Objects.nonNull(player)) {
-            float nextX = player.getX() + (player.getTextureSize().x / 2);
-            if (nextX - (camera.viewportWidth / 2) > 0 && nextX + (camera.viewportWidth / 2) < background.getWidth()) {
-                camera.position.x = nextX;
-            }
-            float nextY = player.getY() + (player.getTextureSize().y / 2);
-            if (nextY - (camera.viewportHeight/2) > 0 && nextY + (camera.viewportHeight/2) < background.getHeight()) {
-                camera.position.y = nextY;
-            }
-        }
-        camera.update();
+        updateCamera(delta);
         updateServer(delta);
-        if (Objects.nonNull(player)) {
-            handleInput(delta);
-            player.update(delta);
-        }
-        for (Map.Entry<String, Character> characterEntry : connectedPlayers.entrySet()) {
-            characterEntry.getValue().update(delta);
-        }
+        updateCharacters(delta);
 
         //Draw
         game.getBatch().setProjectionMatrix(camera.combined);
@@ -88,6 +76,137 @@ public class ArenaScreen implements Screen {
             player.draw(game.getBatch());
         }
         game.getBatch().end();
+    }
+
+    private void updateCharacters(float delta) {
+        if (Objects.nonNull(player)) {
+            inputHandler.handleInput(delta);
+            player.update(delta);
+        }
+        for (Map.Entry<String, Character> characterEntry : connectedPlayers.entrySet()) {
+            characterEntry.getValue().update(delta);
+        }
+    }
+
+    private void updateCamera(float delta) {
+        if (Objects.nonNull(player)) {
+            float nextX = player.getX() + (player.getTextureSize().x / 2);
+            if (nextX - (camera.viewportWidth / 2) > 0 && nextX + (camera.viewportWidth / 2) < background.getWidth()) {
+                camera.position.x = nextX;
+            }
+            float nextY = player.getY() + (player.getTextureSize().y / 2);
+            if (nextY - (camera.viewportHeight/2) > 0 && nextY + (camera.viewportHeight/2) < background.getHeight()) {
+                camera.position.y = nextY;
+            }
+        }
+        camera.update();
+    }
+
+    private void updateServer(float delta) {
+        timeSinceLastServerUpdate += delta;
+        if (timeSinceLastServerUpdate >= AppConstants.SERVER_UPDATE_RATE && Objects.nonNull(player) && player.isDirty()) {
+            try {
+                JSONObject playerData = new JSONObject();
+                playerData.put("x", player.getX());
+                playerData.put("y", player.getY());
+                playerData.put("flipX", player.isFlipX());
+                playerData.put("state", player.getState().name());
+                socket.emit(SocketEventConstants.PLAYER_MOVED, playerData);
+            } catch (Exception e) {
+                Gdx.app.error(AppConstants.SOCKET_IO_LOG_TAG, "Error while updating server" , e);
+            }
+
+        }
+    }
+
+    private void connectSocket() {
+        try {
+            socket = IO.socket(AppConstants.SERVER_URL);
+            socket.connect();
+        } catch (Exception e) {
+            Gdx.app.error(AppConstants.SOCKET_IO_LOG_TAG, "Connection Error" , e);
+        }
+    }
+
+    private void configureSocketEvents() {
+        socket.on(SocketEventConstants.CONNECT, args -> {
+            Gdx.app.log(AppConstants.SOCKET_IO_LOG_TAG, "Connected");
+            Gdx.app.postRunnable(() -> {
+                    player = new Character(textureConfigFactory.getTextureConfigForCharacter(CharacterType.ELF_WARRIOR),
+                            new Vector2(camera.viewportWidth, camera.viewportHeight), false);
+                    inputHandler = new ArenaInputHandler(player, background);
+            });
+        }).on(SocketEventConstants.SOCKET_ID, args -> {
+            JSONObject data = (JSONObject) args[0];
+            try {
+                String id = data.getString("id");
+                Gdx.app.log(AppConstants.SOCKET_IO_LOG_TAG, "Socket ID : " + id);
+            } catch (Exception e) {
+                Gdx.app.error(AppConstants.SOCKET_IO_LOG_TAG, "Error while getting socket id", e);
+            }
+        }).on(SocketEventConstants.NEW_PLAYER_CONNECTED, args -> {
+            JSONObject data = (JSONObject) args[0];
+            try {
+                String id = data.getString("id");
+                Gdx.app.log(AppConstants.SOCKET_IO_LOG_TAG, "New player connected. Player ID : " + id);
+                Gdx.app.postRunnable(() ->
+                        connectedPlayers.put(id,
+                                new Character(textureConfigFactory.getTextureConfigForCharacter(CharacterType.ELF_WARRIOR))));
+            } catch (Exception e) {
+                Gdx.app.error(AppConstants.SOCKET_IO_LOG_TAG, "Error while getting new player id", e);
+            }
+        }).on(SocketEventConstants.PLAYER_DISCONNECTED, args -> {
+            JSONObject data = (JSONObject) args[0];
+            try {
+                String id = data.getString("id");
+                Gdx.app.log(AppConstants.SOCKET_IO_LOG_TAG, "Player disconnected. Player ID : " + id);
+                connectedPlayers.remove(id);
+            } catch (Exception e) {
+                Gdx.app.error(AppConstants.SOCKET_IO_LOG_TAG, "Error while getting disconnected player id", e);
+            }
+        }).on(SocketEventConstants.GET_PLAYERS, args -> {
+            JSONArray playerInfoList = (JSONArray) args[0];
+            try {
+                for (int i = 0; i < playerInfoList.length(); i++) {
+                    JSONObject playerInfo = (JSONObject) playerInfoList.get(i);
+                    String id = playerInfo.getString("id");
+                    Vector2 position = new Vector2(((Double) playerInfo.getDouble("x")).floatValue(),
+                            ((Double) playerInfo.getDouble("y")).floatValue());
+                    boolean flipX = playerInfo.getBoolean("flipX");
+                    Gdx.app.postRunnable(() ->
+                            connectedPlayers.put(id,
+                                    new Character(textureConfigFactory.getTextureConfigForCharacter(CharacterType.ELF_WARRIOR),
+                                            position, flipX)));
+                }
+                Gdx.app.log(AppConstants.SOCKET_IO_LOG_TAG, "GetPlayers succeeded");
+            } catch (Exception e) {
+                Gdx.app.error(AppConstants.SOCKET_IO_LOG_TAG, "Error while getting players", e);
+            }
+        }).on(SocketEventConstants.PLAYER_MOVED, args -> {
+            JSONObject data = (JSONObject) args[0];
+            try {
+                String id = data.getString("id");
+                if (connectedPlayers.containsKey(id)) {
+                    connectedPlayers.get(id).setX(((Double) data.getDouble("x")).floatValue());
+                    connectedPlayers.get(id).setY(((Double) data.getDouble("y")).floatValue());
+                    connectedPlayers.get(id).setFlipX((data.getBoolean("flipX")));
+                    if (connectedPlayers.get(id).isCanMove()) {
+                        connectedPlayers.get(id).setState(State.valueOf(data.getString("state")));
+                    }
+                }
+            } catch (Exception e) {
+                Gdx.app.error(AppConstants.SOCKET_IO_LOG_TAG, "Error while processing player moved", e);
+            }
+        });
+    }
+
+    @Override
+    public void dispose() {
+        player.dispose();
+        for (Map.Entry<String, Character> characterEntry : connectedPlayers.entrySet()) {
+            characterEntry.getValue().dispose();
+        }
+        background.dispose();
     }
 
     @Override
@@ -108,151 +227,5 @@ public class ArenaScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-    }
-
-    @Override
-    public void dispose() {
-        player.dispose();
-        for (Map.Entry<String, Character> characterEntry : connectedPlayers.entrySet()) {
-            characterEntry.getValue().dispose();
-        }
-    }
-
-    private void handleInput(final float deltaTime) {
-        if (Gdx.input.isTouched()) {
-            player.setState(State.ATTACKING);
-            player.setCanMove(false);
-        }
-        if (player.isCanMove()) {
-            boolean isMoving = false;
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                if (player.getX() + (-200 * deltaTime) > 0) {
-                    player.setX(player.getX() + (-200 * deltaTime));
-                }
-                player.setFlipX(true);
-                isMoving = true;
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                if (player.getX() + player.getTextureSize().x + (200 * deltaTime) < background.getWidth()) {
-                    player.setX(player.getX() + (200 * deltaTime));
-                }
-                player.setFlipX(false);
-                isMoving = true;
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                if (player.getY() + player.getTextureSize().y + (200 * deltaTime) < background.getHeight()) {
-                    player.setY(player.getY() + (200 * deltaTime));
-                }
-                isMoving = true;
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                if (player.getY() + (-200 * deltaTime) > 0) {
-                    player.setY(player.getY() + (-200 * deltaTime));
-                }
-                isMoving = true;
-            }
-
-            if (isMoving) {
-                player.setState(State.MOVING);
-            } else {
-                player.setState(State.IDLE);
-            }
-        }
-    }
-
-    private void updateServer(float delta) {
-        timeSinceLastServerUpdate += delta;
-        if (timeSinceLastServerUpdate >= AppConstants.SERVER_UPDATE_RATE && Objects.nonNull(player) && player.isDirty()) {
-            try {
-                JSONObject playerData = new JSONObject();
-                playerData.put("x", player.getX());
-                playerData.put("y", player.getY());
-                playerData.put("flipX", player.isFlipX());
-                playerData.put("state", player.getState().name());
-                socket.emit(SocketEventConstants.PLAYER_MOVED, playerData);
-            } catch (Exception e) {
-                Gdx.app.error("SocketIO", "Error while updating server" , e);
-            }
-
-        }
-    }
-
-    private void connectSocket() {
-        try {
-            socket = IO.socket(AppConstants.SERVER_URL);
-            socket.connect();
-        } catch (Exception e) {
-            Gdx.app.error("SocketIO", "Connection Error" , e);
-        }
-    }
-
-    private void configureSocketEvents() {
-        socket.on(SocketEventConstants.CONNECT, args -> {
-            Gdx.app.log("SocketIO", "Connected");
-            Gdx.app.postRunnable(() ->
-                    player = new Character(textureConfigFactory.getTextureConfigForCharacter(CharacterType.ELF_WARRIOR),
-                            new Vector2(camera.viewportWidth, camera.viewportHeight), false));
-        }).on(SocketEventConstants.SOCKET_ID, args -> {
-            JSONObject data = (JSONObject) args[0];
-            try {
-                String id = data.getString("id");
-                Gdx.app.log("SocketIO", "Socket ID : " + id);
-            } catch (Exception e) {
-                Gdx.app.error("SocketIO", "Error while getting socket id", e);
-            }
-        }).on(SocketEventConstants.NEW_PLAYER_CONNECTED, args -> {
-            JSONObject data = (JSONObject) args[0];
-            try {
-                String id = data.getString("id");
-                Gdx.app.log("SocketIO", "New player connected. Player ID : " + id);
-                Gdx.app.postRunnable(() ->
-                        connectedPlayers.put(id,
-                                new Character(textureConfigFactory.getTextureConfigForCharacter(CharacterType.ELF_WARRIOR))));
-            } catch (Exception e) {
-                Gdx.app.error("SocketIO", "Error while getting new player id", e);
-            }
-        }).on(SocketEventConstants.PLAYER_DISCONNECTED, args -> {
-            JSONObject data = (JSONObject) args[0];
-            try {
-                String id = data.getString("id");
-                Gdx.app.log("SocketIO", "Player disconnected. Player ID : " + id);
-                connectedPlayers.remove(id);
-            } catch (Exception e) {
-                Gdx.app.error("SocketIO", "Error while getting disconnected player id", e);
-            }
-        }).on(SocketEventConstants.GET_PLAYERS, args -> {
-            JSONArray playerInfoList = (JSONArray) args[0];
-            try {
-                for (int i = 0; i < playerInfoList.length(); i++) {
-                    JSONObject playerInfo = (JSONObject) playerInfoList.get(i);
-                    String id = playerInfo.getString("id");
-                    Vector2 position = new Vector2(((Double) playerInfo.getDouble("x")).floatValue(),
-                            ((Double) playerInfo.getDouble("y")).floatValue());
-                    boolean flipX = playerInfo.getBoolean("flipX");
-                    Gdx.app.postRunnable(() ->
-                            connectedPlayers.put(id,
-                                    new Character(textureConfigFactory.getTextureConfigForCharacter(CharacterType.ELF_WARRIOR),
-                                            position, flipX)));
-                }
-                Gdx.app.log("SocketIO", "GetPlayers succeeded");
-            } catch (Exception e) {
-                Gdx.app.error("SocketIO", "Error while getting players", e);
-            }
-        }).on(SocketEventConstants.PLAYER_MOVED, args -> {
-            JSONObject data = (JSONObject) args[0];
-            try {
-                String id = data.getString("id");
-                if (connectedPlayers.containsKey(id)) {
-                    connectedPlayers.get(id).setX(((Double) data.getDouble("x")).floatValue());
-                    connectedPlayers.get(id).setY(((Double) data.getDouble("y")).floatValue());
-                    connectedPlayers.get(id).setFlipX((data.getBoolean("flipX")));
-                    if (connectedPlayers.get(id).isCanMove()) {
-                        connectedPlayers.get(id).setState(State.valueOf(data.getString("state")));
-                    }
-                }
-            } catch (Exception e) {
-                Gdx.app.error("SocketIO", "Error while processing player moved", e);
-            }
-        });
     }
 }

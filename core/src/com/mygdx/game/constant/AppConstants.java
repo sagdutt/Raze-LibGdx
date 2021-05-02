@@ -12,6 +12,8 @@ public final class AppConstants {
 
     public static final float SERVER_UPDATE_RATE = 1/30f;
 
+    public static final String SOCKET_IO_LOG_TAG = "SocketIO";
+
     private AppConstants() {
     }
 }
