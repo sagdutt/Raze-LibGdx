@@ -1,0 +1,455 @@
+
+ElfWarrior.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+Elf_02__ATTACK
+  rotate: false
+  xy: 1004, 760
+  size: 1000, 258
+  orig: 1000, 525
+  offset: 0, 77
+  index: 2
+Elf_02__DIE
+  rotate: false
+  xy: 1004, 502
+  size: 1000, 256
+  orig: 1000, 525
+  offset: 0, 75
+  index: 3
+Elf_02__DIE
+  rotate: false
+  xy: 2, 17
+  size: 1000, 219
+  orig: 1000, 525
+  offset: 0, 94
+  index: 6
+Elf_02__DIE
+  rotate: false
+  xy: 1004, 2
+  size: 1000, 240
+  orig: 1000, 525
+  offset: 0, 87
+  index: 5
+Elf_02__JUMP
+  rotate: false
+  xy: 2, 757
+  size: 1000, 261
+  orig: 1000, 525
+  offset: 0, 135
+  index: 5
+Elf_02__JUMP
+  rotate: false
+  xy: 1004, 244
+  size: 1000, 256
+  orig: 1000, 525
+  offset: 0, 107
+  index: 7
+Elf_02__RUN
+  rotate: false
+  xy: 2, 497
+  size: 1000, 258
+  orig: 1000, 525
+  offset: 0, 73
+  index: 4
+Elf_02__RUN
+  rotate: false
+  xy: 2, 497
+  size: 1000, 258
+  orig: 1000, 525
+  offset: 0, 73
+  index: 6
+Elf_02__RUN
+  rotate: false
+  xy: 2, 238
+  size: 1000, 257
+  orig: 1000, 525
+  offset: 0, 75
+  index: 7
+Elf_02__RUN
+  rotate: false
+  xy: 2, 238
+  size: 1000, 257
+  orig: 1000, 525
+  offset: 0, 75
+  index: 3
+
+ElfWarrior2.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+Elf_02__DIE
+  rotate: false
+  xy: 2, 508
+  size: 1000, 256
+  orig: 1000, 525
+  offset: 0, 74
+  index: 2
+Elf_02__DIE
+  rotate: false
+  xy: 1004, 2
+  size: 1000, 248
+  orig: 1000, 525
+  offset: 0, 80
+  index: 4
+Elf_02__DIE
+  rotate: false
+  xy: 2, 61
+  size: 1000, 188
+  orig: 1000, 525
+  offset: 0, 97
+  index: 7
+Elf_02__HURT
+  rotate: false
+  xy: 1004, 509
+  size: 1000, 255
+  orig: 1000, 525
+  offset: 0, 77
+  index: 8
+Elf_02__JUMP
+  rotate: false
+  xy: 2, 766
+  size: 1000, 256
+  orig: 1000, 525
+  offset: 0, 120
+  index: 4
+Elf_02__JUMP
+  rotate: false
+  xy: 1004, 766
+  size: 1000, 256
+  orig: 1000, 525
+  offset: 0, 120
+  index: 6
+Elf_02__JUMP
+  rotate: false
+  xy: 2, 251
+  size: 1000, 255
+  orig: 1000, 525
+  offset: 0, 107
+  index: 3
+Elf_02__JUMP
+  rotate: false
+  xy: 1004, 252
+  size: 1000, 255
+  orig: 1000, 525
+  offset: 0, 97
+  index: 8
+
+ElfWarrior3.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+Elf_02__ATTACK
+  rotate: false
+  xy: 2, 432
+  size: 1000, 255
+  orig: 1000, 525
+  offset: 0, 77
+  index: 3
+Elf_02__DIE
+  rotate: false
+  xy: 2, 689
+  size: 1000, 255
+  orig: 1000, 525
+  offset: 0, 77
+  index: 1
+Elf_02__DIE
+  rotate: false
+  xy: 2, 2
+  size: 1000, 171
+  orig: 1000, 525
+  offset: 0, 100
+  index: 8
+Elf_02__DIE
+  rotate: false
+  xy: 1004, 11
+  size: 1000, 162
+  orig: 1000, 525
+  offset: 0, 97
+  index: 9
+Elf_02__HURT
+  rotate: false
+  xy: 1004, 689
+  size: 1000, 255
+  orig: 1000, 525
+  offset: 0, 77
+  index: 2
+Elf_02__HURT
+  rotate: false
+  xy: 2, 175
+  size: 1000, 255
+  orig: 1000, 525
+  offset: 0, 77
+  index: 7
+Elf_02__HURT
+  rotate: false
+  xy: 1004, 432
+  size: 1000, 255
+  orig: 1000, 525
+  offset: 0, 76
+  index: 4
+Elf_02__HURT
+  rotate: false
+  xy: 1004, 175
+  size: 1000, 255
+  orig: 1000, 525
+  offset: 0, 76
+  index: 6
+
+ElfWarrior4.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+Elf_02__ATTACK
+  rotate: false
+  xy: 2, 511
+  size: 1000, 254
+  orig: 1000, 525
+  offset: 0, 79
+  index: 6
+Elf_02__ATTACK
+  rotate: false
+  xy: 1004, 512
+  size: 1000, 254
+  orig: 1000, 525
+  offset: 0, 79
+  index: 5
+Elf_02__ATTACK
+  rotate: false
+  xy: 1004, 2
+  size: 1000, 252
+  orig: 1000, 525
+  offset: 0, 78
+  index: 1
+Elf_02__HURT
+  rotate: false
+  xy: 2, 767
+  size: 1000, 255
+  orig: 1000, 525
+  offset: 0, 77
+  index: 3
+Elf_02__HURT
+  rotate: false
+  xy: 1004, 768
+  size: 1000, 254
+  orig: 1000, 525
+  offset: 0, 75
+  index: 5
+Elf_02__IDLE
+  rotate: false
+  xy: 2, 2
+  size: 1000, 251
+  orig: 1000, 525
+  offset: 0, 79
+  index: 7
+Elf_02__JUMP
+  rotate: false
+  xy: 2, 255
+  size: 1000, 254
+  orig: 1000, 525
+  offset: 0, 97
+  index: 2
+Elf_02__RUN
+  rotate: false
+  xy: 1004, 256
+  size: 1000, 254
+  orig: 1000, 525
+  offset: 0, 79
+  index: 9
+Elf_02__RUN
+  rotate: false
+  xy: 1004, 256
+  size: 1000, 254
+  orig: 1000, 525
+  offset: 0, 79
+  index: 1
+
+ElfWarrior5.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+Elf_02__ATTACK
+  rotate: false
+  xy: 2, 767
+  size: 1000, 254
+  orig: 1000, 525
+  offset: 0, 79
+  index: 7
+Elf_02__ATTACK
+  rotate: false
+  xy: 1004, 768
+  size: 1000, 253
+  orig: 1000, 525
+  offset: 0, 79
+  index: 8
+Elf_02__ATTACK
+  rotate: false
+  xy: 2, 2
+  size: 1000, 253
+  orig: 1000, 525
+  offset: 0, 79
+  index: 9
+Elf_02__HURT
+  rotate: false
+  xy: 2, 257
+  size: 1000, 253
+  orig: 1000, 525
+  offset: 0, 78
+  index: 9
+Elf_02__HURT
+  rotate: false
+  xy: 1004, 513
+  size: 1000, 253
+  orig: 1000, 525
+  offset: 0, 78
+  index: 1
+Elf_02__HURT
+  rotate: false
+  xy: 1004, 259
+  size: 1000, 252
+  orig: 1000, 525
+  offset: 0, 79
+  index: 0
+Elf_02__ATTACK
+  rotate: false
+  xy: 1004, 259
+  size: 1000, 252
+  orig: 1000, 525
+  offset: 0, 79
+  index: 0
+Elf_02__JUMP
+  rotate: false
+  xy: 1004, 259
+  size: 1000, 252
+  orig: 1000, 525
+  offset: 0, 79
+  index: 0
+Elf_02__IDLE
+  rotate: false
+  xy: 1004, 5
+  size: 1000, 252
+  orig: 1000, 525
+  offset: 0, 79
+  index: 4
+Elf_02__RUN
+  rotate: false
+  xy: 2, 512
+  size: 1000, 253
+  orig: 1000, 525
+  offset: 0, 79
+  index: 2
+Elf_02__RUN
+  rotate: false
+  xy: 2, 512
+  size: 1000, 253
+  orig: 1000, 525
+  offset: 0, 79
+  index: 8
+
+ElfWarrior6.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+Elf_02__ATTACK
+  rotate: false
+  xy: 2, 2
+  size: 1000, 252
+  orig: 1000, 525
+  offset: 0, 78
+  index: 4
+Elf_02__DIE
+  rotate: false
+  xy: 2, 510
+  size: 1000, 252
+  orig: 1000, 525
+  offset: 0, 79
+  index: 0
+Elf_02__IDLE
+  rotate: false
+  xy: 2, 764
+  size: 1000, 252
+  orig: 1000, 525
+  offset: 0, 79
+  index: 6
+Elf_02__IDLE
+  rotate: false
+  xy: 1004, 510
+  size: 1000, 252
+  orig: 1000, 525
+  offset: 0, 79
+  index: 5
+Elf_02__IDLE
+  rotate: false
+  xy: 1004, 257
+  size: 1000, 251
+  orig: 1000, 525
+  offset: 0, 79
+  index: 9
+Elf_02__IDLE
+  rotate: false
+  xy: 1004, 4
+  size: 1000, 251
+  orig: 1000, 525
+  offset: 0, 79
+  index: 1
+Elf_02__JUMP
+  rotate: false
+  xy: 1004, 764
+  size: 1000, 252
+  orig: 1000, 525
+  offset: 0, 88
+  index: 9
+Elf_02__JUMP
+  rotate: false
+  xy: 2, 256
+  size: 1000, 252
+  orig: 1000, 525
+  offset: 0, 88
+  index: 1
+
+ElfWarrior7.png
+size: 2048, 1024
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+Elf_02__IDLE
+  rotate: false
+  xy: 2, 507
+  size: 1000, 251
+  orig: 1000, 525
+  offset: 0, 79
+  index: 3
+Elf_02__IDLE
+  rotate: false
+  xy: 2, 254
+  size: 1000, 251
+  orig: 1000, 525
+  offset: 0, 79
+  index: 8
+Elf_02__IDLE
+  rotate: false
+  xy: 1004, 507
+  size: 1000, 251
+  orig: 1000, 525
+  offset: 0, 79
+  index: 2
+Elf_02__RUN
+  rotate: false
+  xy: 2, 2
+  size: 1000, 250
+  orig: 1000, 525
+  offset: 0, 84
+  index: 0
+Elf_02__RUN
+  rotate: false
+  xy: 1004, 255
+  size: 1000, 250
+  orig: 1000, 525
+  offset: 0, 80
+  index: 5
