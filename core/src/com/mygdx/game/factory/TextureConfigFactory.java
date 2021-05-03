@@ -1,28 +1,51 @@
 package com.mygdx.game.factory;
 
-import com.mygdx.game.constant.CharacterType;
-import com.mygdx.game.constant.CharacterAnimStateConstants;
+import com.mygdx.game.constant.CharacterConstants.CharacterType;
+import com.mygdx.game.constant.State;
+import com.mygdx.game.model.AnimConfig;
 import com.mygdx.game.model.TextureConfig;
+import com.mygdx.game.util.FluentHashMap;
 
 public class TextureConfigFactory {
 
-    private final TextureConfig elfWarriorConfig = new TextureConfig("ElfWarrior/ElfWarrior.atlas",
-            400, 100, CharacterAnimStateConstants.getElfWarriorAnimMap());
+    private static final TextureConfig ELF_WARRIOR_CONFIG = TextureConfig.builder()
+            .texturePath("ElfWarrior/ElfWarrior.atlas")
+            .textureWidth(400)
+            .textureHeight(100)
+            .animConfigMap(new FluentHashMap<State, AnimConfig>()
+                    .withEntry(State.IDLE, AnimConfig.builder().name("Elf_02__IDLE").frameRate(1/25f).build())
+                    .withEntry(State.MOVING, AnimConfig.builder().name("Elf_02__RUN").frameRate(1/25f).build())
+                    .withEntry(State.ATTACKING, AnimConfig.builder().name("Elf_02__ATTACK").frameRate(1/25f).build()))
+            .build();
 
-    private final TextureConfig elfArcherConfig = new TextureConfig("ElfArcher/ElfArcher.atlas",
-            400, 100, CharacterAnimStateConstants.getElfArcherAnimMap());
+    private static final TextureConfig ELF_ARCHER_CONFIG = TextureConfig.builder()
+            .texturePath("ElfArcher/ElfArcher.atlas")
+            .textureWidth(400)
+            .textureHeight(100)
+            .animConfigMap(new FluentHashMap<State, AnimConfig>()
+                    .withEntry(State.IDLE, AnimConfig.builder().name("Elf_01__IDLE").frameRate(1/25f).build())
+                    .withEntry(State.MOVING, AnimConfig.builder().name("Elf_01__RUN").frameRate(1/25f).build())
+                    .withEntry(State.ATTACKING, AnimConfig.builder().name("Elf_01__ATTACK").frameRate(1/25f).build()))
+            .build();
 
-    private final TextureConfig elfMageConfig = new TextureConfig("ElfMage/ElfMage.atlas",
-            400, 100, CharacterAnimStateConstants.getElfMageAnimMap());
+    private static final TextureConfig ELF_MAGE_CONFIG = TextureConfig.builder()
+            .texturePath("ElfMage/ElfMage.atlas")
+            .textureWidth(400)
+            .textureHeight(100)
+            .animConfigMap(new FluentHashMap<State, AnimConfig>()
+                    .withEntry(State.IDLE, AnimConfig.builder().name("Elf_03__IDLE").frameRate(1/25f).build())
+                    .withEntry(State.MOVING, AnimConfig.builder().name("Elf_03__RUN").frameRate(1/25f).build())
+                    .withEntry(State.ATTACKING, AnimConfig.builder().name("Elf_03__ATTACK").frameRate(1/25f).build()))
+            .build();
 
     public TextureConfig getTextureConfigForCharacter(final CharacterType characterType) {
         switch (characterType) {
             case ELF_WARRIOR:
-                return elfWarriorConfig;
+                return ELF_WARRIOR_CONFIG;
             case ELF_ARCHER:
-                return elfArcherConfig;
+                return ELF_ARCHER_CONFIG;
             case ELF_MAGE:
-                return elfMageConfig;
+                return ELF_MAGE_CONFIG;
             default:
                 throw new IllegalStateException("Unexpected value: " + characterType);
         }

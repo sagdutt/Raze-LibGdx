@@ -1,7 +1,6 @@
 package com.mygdx.game.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,7 +9,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.RazeGame;
 import com.mygdx.game.character.Character;
 import com.mygdx.game.constant.AppConstants;
-import com.mygdx.game.constant.CharacterType;
+import com.mygdx.game.constant.CharacterConstants.CharacterType;
 import com.mygdx.game.constant.SocketEventConstants;
 import com.mygdx.game.constant.State;
 import com.mygdx.game.factory.TextureConfigFactory;
@@ -26,8 +25,6 @@ import java.util.Map;
 import java.util.Objects;
 
 public class ArenaScreen implements Screen {
-
-    private static final int MOVEMENT_SPEED = 250;
 
     private final RazeGame game;
 

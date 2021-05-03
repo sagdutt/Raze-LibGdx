@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.character.Character;
 import com.mygdx.game.constant.State;
 
-public class ArenaInputHandler implements InputHandler {
+import static com.mygdx.game.constant.CharacterConstants.PLAYER_MOVEMENT_SPEED;
 
-    private static final int MOVEMENT_SPEED = 250;
+public class ArenaInputHandler implements InputHandler {
 
     private final Character player;
 
@@ -28,28 +28,28 @@ public class ArenaInputHandler implements InputHandler {
         if (player.isCanMove()) {
             boolean isMoving = false;
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                if (player.getX() + (-MOVEMENT_SPEED * deltaTime) > 0) {
-                    player.setX(player.getX() + (-MOVEMENT_SPEED * deltaTime));
+                if (player.getX() + (-PLAYER_MOVEMENT_SPEED * deltaTime) > 0) {
+                    player.setX(player.getX() + (-PLAYER_MOVEMENT_SPEED * deltaTime));
                 }
                 player.setFlipX(true);
                 isMoving = true;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                if (player.getX() + player.getTextureSize().x + (MOVEMENT_SPEED * deltaTime) < background.getWidth()) {
-                    player.setX(player.getX() + (MOVEMENT_SPEED * deltaTime));
+                if (player.getX() + player.getTextureSize().x + (PLAYER_MOVEMENT_SPEED * deltaTime) < background.getWidth()) {
+                    player.setX(player.getX() + (PLAYER_MOVEMENT_SPEED * deltaTime));
                 }
                 player.setFlipX(false);
                 isMoving = true;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                if (player.getY() + player.getTextureSize().y + (MOVEMENT_SPEED * deltaTime) < background.getHeight()) {
-                    player.setY(player.getY() + (MOVEMENT_SPEED * deltaTime));
+                if (player.getY() + player.getTextureSize().y + (PLAYER_MOVEMENT_SPEED * deltaTime) < background.getHeight()) {
+                    player.setY(player.getY() + (PLAYER_MOVEMENT_SPEED * deltaTime));
                 }
                 isMoving = true;
             }
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                if (player.getY() + (-MOVEMENT_SPEED * deltaTime) > 0) {
-                    player.setY(player.getY() + (-MOVEMENT_SPEED * deltaTime));
+                if (player.getY() + (-PLAYER_MOVEMENT_SPEED * deltaTime) > 0) {
+                    player.setY(player.getY() + (-PLAYER_MOVEMENT_SPEED * deltaTime));
                 }
                 isMoving = true;
             }
