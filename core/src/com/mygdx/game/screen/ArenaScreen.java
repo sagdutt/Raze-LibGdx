@@ -2,32 +2,36 @@ package com.mygdx.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.mygdx.game.RazeGame;
 import com.mygdx.game.character.Character;
 import com.mygdx.game.client.SocketIOClient;
 import com.mygdx.game.constant.AppConstants;
 import com.mygdx.game.constant.CharacterConstants.CharacterType;
 import com.mygdx.game.constant.SocketEventConstants;
 import com.mygdx.game.event.Event;
+import com.mygdx.game.event.EventBus;
 import com.mygdx.game.event.EventHandler;
-import com.mygdx.game.event.eventbus.InMemoryEventBus;
 import com.mygdx.game.event.events.*;
 import com.mygdx.game.factory.TextureConfigFactory;
 import com.mygdx.game.input.ArenaInputHandler;
 import com.mygdx.game.input.InputHandler;
+import lombok.NonNull;
 import org.json.JSONObject;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.*;
 
+@Singleton
 public class ArenaScreen implements Screen, EventHandler {
 
-    private final RazeGame game;
+    private final Batch batch;
 
-    private final OrthographicCamera camera;
+    private final Camera camera;
 
     private final TextureConfigFactory textureConfigFactory;
 
@@ -43,15 +47,19 @@ public class ArenaScreen implements Screen, EventHandler {
 
     private InputHandler inputHandler;
 
-    public ArenaScreen(final RazeGame game) {
-        this.game = game;
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, AppConstants.APP_WIDTH, AppConstants.APP_HEIGHT);
-        textureConfigFactory = new TextureConfigFactory();
-        connectedPlayers = new HashMap<>();
-        background = new Texture("Background/game_background_4.png"); //TODO : Refactor this
-        InMemoryEventBus.getInstance().subscribe(this);
-        socketIOClient = new SocketIOClient();
+    @Inject
+    public ArenaScreen(@NonNull final Batch batch,
+                       @NonNull final Camera camera,
+                       @NonNull final TextureConfigFactory textureConfigFactory,
+                       @NonNull final SocketIOClient socketIOClient,
+                       @NonNull final EventBus eventBus) {
+        this.batch = batch;
+        this.camera = camera;
+        this.textureConfigFactory = textureConfigFactory;
+        this.socketIOClient = socketIOClient;
+        this.connectedPlayers = new HashMap<>();
+        this.background = new Texture("Background/game_background_4.png"); //TODO : Refactor this
+        eventBus.subscribe(this);
     }
 
     @Override
@@ -64,16 +72,16 @@ public class ArenaScreen implements Screen, EventHandler {
         updateCharacters(delta);
 
         //Draw
-        game.getBatch().setProjectionMatrix(camera.combined);
-        game.getBatch().begin();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
         if (Objects.nonNull(player)) {
-            game.getBatch().draw(background, 0, 0);
+            batch.draw(background, 0, 0);
             for (Map.Entry<String, Character> characterEntry : connectedPlayers.entrySet()) {
-                characterEntry.getValue().draw(game.getBatch());
+                characterEntry.getValue().draw(batch);
             }
-            player.draw(game.getBatch());
+            player.draw(batch);
         }
-        game.getBatch().end();
+        batch.end();
     }
 
     private void updateCharacters(float delta) {

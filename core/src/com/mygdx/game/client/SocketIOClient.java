@@ -11,9 +11,12 @@ import com.mygdx.game.event.events.*;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import lombok.NonNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,14 +24,16 @@ import java.util.List;
  * Client for establishing a connection to the socket io server. Can be used to send messages to the server.
  * Publishes all messages received from the server to the event bus.
  */
+@Singleton
 public class SocketIOClient {
 
     private final EventBus eventBus;
 
     private Socket socket;
 
-    public SocketIOClient() {
-        eventBus = InMemoryEventBus.getInstance();
+    @Inject
+    public SocketIOClient(@NonNull final EventBus eventBus) {
+        this.eventBus = eventBus;
         connectSocket();
         configureSocketEvents();
     }

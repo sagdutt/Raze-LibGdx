@@ -4,6 +4,8 @@ import com.mygdx.game.event.Event;
 import com.mygdx.game.event.EventBus;
 import com.mygdx.game.event.EventHandler;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.*;
 
 /**
@@ -11,19 +13,10 @@ import java.util.*;
  */
 public class InMemoryEventBus implements EventBus {
 
-    private static InMemoryEventBus instance;
-
     private final Map<Class<?>, List<EventHandler>> eventHandlerMap;
 
-    private InMemoryEventBus() {
+    public InMemoryEventBus() {
         eventHandlerMap = new HashMap<>();
-    }
-
-    public static InMemoryEventBus getInstance() {
-        if (Objects.isNull(instance)) {
-            instance = new InMemoryEventBus();
-        }
-        return instance;
     }
 
     @Override

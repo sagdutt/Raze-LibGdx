@@ -1,18 +1,17 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.screen.ArenaScreen;
+import com.mygdx.game.dagger.component.AppComponent;
+import com.mygdx.game.dagger.component.DaggerAppComponent;
 
 public class RazeGame extends Game {
 
-	private SpriteBatch batch;
+	private AppComponent appComponent;
 	
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		this.setScreen(new ArenaScreen(this));
+		appComponent = DaggerAppComponent.create();
+		this.setScreen(appComponent.getArenaScreen());
 	}
 
 	@Override
@@ -22,10 +21,6 @@ public class RazeGame extends Game {
 
 	@Override
 	public void dispose () {
-		batch.dispose();
 	}
 
-	public Batch getBatch() {
-		return batch;
-	}
 }
