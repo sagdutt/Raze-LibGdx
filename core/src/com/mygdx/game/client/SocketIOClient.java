@@ -3,10 +3,10 @@ package com.mygdx.game.client;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.constant.AppConstants;
+import com.mygdx.game.constant.CharacterConstants;
 import com.mygdx.game.constant.SocketEventConstants;
 import com.mygdx.game.constant.State;
 import com.mygdx.game.event.EventBus;
-import com.mygdx.game.event.eventbus.InMemoryEventBus;
 import com.mygdx.game.event.events.*;
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -117,10 +117,13 @@ public class SocketIOClient {
                     Vector2 position = new Vector2(((Double) playerInfo.getDouble("x")).floatValue(),
                             ((Double) playerInfo.getDouble("y")).floatValue());
                     boolean flipX = playerInfo.getBoolean("flipX");
+                    CharacterConstants.CharacterType characterType =
+                            CharacterConstants.CharacterType.valueOf(playerInfo.getString("character"));
                     getPlayerPayloadList.add(GetPlayersEvent.GetPlayerPayload.builder()
                             .id(id)
                             .position(position)
                             .flipX(flipX)
+                            .characterType(characterType)
                             .build());
                 }
                 Gdx.app.log(AppConstants.SOCKET_IO_LOG_TAG, "GetPlayers succeeded");
@@ -153,9 +156,14 @@ public class SocketIOClient {
             JSONObject data = (JSONObject) args[0];
             try {
                 String id = data.getString("id");
+                CharacterConstants.CharacterType characterType =
+                        CharacterConstants.CharacterType.valueOf(data.getString("character"));
                 Gdx.app.log(AppConstants.SOCKET_IO_LOG_TAG, "New player connected. Player ID : " + id);
                 eventBus.publish(NewPlayerConnectedEvent.builder()
-                        .id(id)
+                        .newPlayerConnectedPayload(NewPlayerConnectedEvent.NewPlayerConnectedPayload.builder()
+                                .id(id)
+                                .characterType(characterType)
+                                .build())
                         .build());
             } catch (Exception e) {
                 Gdx.app.error(AppConstants.SOCKET_IO_LOG_TAG, "Error while getting new player id", e);

@@ -8,6 +8,7 @@ import com.mygdx.game.util.FluentHashMap;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.Map;
 
 @Singleton
 public class TextureConfigFactory {
@@ -57,5 +58,12 @@ public class TextureConfigFactory {
             default:
                 throw new IllegalStateException("Unexpected value: " + characterType);
         }
+    }
+
+    public Map<CharacterType, TextureConfig> getCharacterTypeTextureConfigMap() {
+        return new FluentHashMap<CharacterType, TextureConfig>()
+                .withEntry(CharacterType.ELF_WARRIOR, ELF_WARRIOR_CONFIG)
+                .withEntry(CharacterType.ELF_ARCHER, ELF_ARCHER_CONFIG)
+                .withEntry(CharacterType.ELF_MAGE, ELF_MAGE_CONFIG);
     }
 }
