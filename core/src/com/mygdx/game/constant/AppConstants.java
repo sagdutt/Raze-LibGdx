@@ -14,6 +14,8 @@ public final class AppConstants {
 
     public static final String SOCKET_IO_LOG_TAG = "SocketIO";
 
+    public static final String APP_LOG_TAG = APP_NAME;
+
     private AppConstants() {
     }
 }

@@ -6,6 +6,10 @@ import com.mygdx.game.model.AnimConfig;
 import com.mygdx.game.model.TextureConfig;
 import com.mygdx.game.util.FluentHashMap;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class TextureConfigFactory {
 
     private static final TextureConfig ELF_WARRIOR_CONFIG = TextureConfig.builder()
@@ -37,6 +41,10 @@ public class TextureConfigFactory {
                     .withEntry(State.MOVING, AnimConfig.builder().name("Elf_03__RUN").frameRate(1/25f).build())
                     .withEntry(State.ATTACKING, AnimConfig.builder().name("Elf_03__ATTACK").frameRate(1/25f).build()))
             .build();
+
+    @Inject
+    public TextureConfigFactory() {
+    }
 
     public TextureConfig getTextureConfigForCharacter(final CharacterType characterType) {
         switch (characterType) {
