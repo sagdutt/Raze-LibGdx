@@ -31,6 +31,8 @@ public class GetPlayersEvent implements Event<List<GetPlayersEvent.GetPlayerPayl
         boolean flipX;
 
         CharacterConstants.CharacterType characterType;
+
+        String name;
     }
 
     @Override

@@ -41,12 +41,14 @@ public class CharacterSelectScreen implements Screen, EventHandler {
 
     private Cell<Image> characterImageCell;
 
+    private Cell<TextField> characterNameCell;
+
     private int currentCharacterIndex = 0;
 
     @Inject
     public CharacterSelectScreen(@NonNull final EventBus eventBus,
                                  @NonNull final Stage stage,
-                                 @Named(AppConstants.CHARACTER_SELECT_SKIN) @NonNull final Skin skin,
+                                 @Named(AppConstants.CHARACTER_SELECT) @NonNull final Skin skin,
                                  @NonNull final TextureConfigFactory textureConfigFactory) {
         this.eventBus = eventBus;
         this.stage = stage;
@@ -69,8 +71,9 @@ public class CharacterSelectScreen implements Screen, EventHandler {
         TextButton nextButton = getNextButton();
         TextButton startButton = getStartButton();
         Image characterImage = new Image(characterAnimMap.get(CharacterConstants.CharacterType.values()[currentCharacterIndex]));
+        TextField characterNameTextField = new TextField("", this.skin);
 
-        addItemsToTable(table, previousButton, nextButton, startButton, characterImage);
+        addItemsToTable(table, previousButton, nextButton, startButton, characterImage, characterNameTextField);
 
         stage.addActor(table);
     }
@@ -79,10 +82,15 @@ public class CharacterSelectScreen implements Screen, EventHandler {
                                  final TextButton previousButton,
                                  final TextButton nextButton,
                                  final TextButton startButton,
-                                 final Image characterImage) {
+                                 final Image characterImage,
+                                 final TextField characterNameTextField) {
         table.add(previousButton).padTop(Gdx.graphics.getHeight()/2f).padBottom(20).padLeft(80).align(Align.center);
         characterImageCell = table.add(characterImage).padTop(Gdx.graphics.getHeight()/2.9f).padBottom(20).align(Align.center);
         table.add(nextButton).padTop(Gdx.graphics.getHeight()/2f).padBottom(20).padRight(80).align(Align.center);
+        table.row();
+        table.add(new Label("Character name", this.skin)).colspan(3);
+        table.row();
+        characterNameCell = table.add(characterNameTextField).colspan(3).align(Align.center).padBottom(20);
         table.row();
         table.add(startButton).colspan(3).align(Align.center);
     }
@@ -94,9 +102,16 @@ public class CharacterSelectScreen implements Screen, EventHandler {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(final InputEvent event, final float x, final float y) {
-                eventBus.publish(CharacterSelectedEvent.builder()
-                        .character(CharacterConstants.CharacterType.values()[currentCharacterIndex])
-                        .build());
+                if (Objects.isNull(characterNameCell.getActor().getText()) || characterNameCell.getActor().getText().isEmpty()) {
+                    Gdx.app.log(AppConstants.APP_LOG_TAG, "Must enter name"); // TODO : Popup error message
+                } else {
+                    eventBus.publish(CharacterSelectedEvent.builder()
+                            .characterSelectedPayload(CharacterSelectedEvent.CharacterSelectedPayload.builder()
+                                    .character(CharacterConstants.CharacterType.values()[currentCharacterIndex])
+                                    .name(characterNameCell.getActor().getText())
+                                    .build())
+                            .build());
+                }
             }
         });
         return startButton;

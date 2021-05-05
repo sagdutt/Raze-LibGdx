@@ -9,13 +9,22 @@ import lombok.Value;
 
 @Value
 @Builder
-public class CharacterSelectedEvent implements Event<CharacterConstants.CharacterType> {
+public class CharacterSelectedEvent implements Event<CharacterSelectedEvent.CharacterSelectedPayload> {
 
     @Getter(AccessLevel.PRIVATE)
-    CharacterConstants.CharacterType character;
+    CharacterSelectedPayload characterSelectedPayload;
+
+    @Value
+    @Builder
+    public static class CharacterSelectedPayload {
+
+        CharacterConstants.CharacterType character;
+
+        String name;
+    }
 
     @Override
-    public CharacterConstants.CharacterType getPayload() {
-        return character;
+    public CharacterSelectedPayload getPayload() {
+        return characterSelectedPayload;
     }
 }

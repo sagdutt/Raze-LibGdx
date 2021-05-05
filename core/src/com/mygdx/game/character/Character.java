@@ -1,9 +1,7 @@
 package com.mygdx.game.character;
 
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.constant.State;
@@ -23,6 +21,10 @@ public class Character implements Disposable {
     private final Vector2 position;
 
     private final Vector2 previousPosition;
+
+    private final String name;
+
+    private BitmapFont bitmapFont;
 
     private State state;
 
@@ -45,9 +47,11 @@ public class Character implements Disposable {
         this.state = State.IDLE;
         this.previousState = State.IDLE;
         this.canMove = true;
+        this.name = "Player";
+        this.bitmapFont = new BitmapFont(Gdx.files.internal("Skins/glassy/font-export.fnt"));
     }
 
-    public Character(final TextureConfig textureConfig, final Vector2 position, final boolean flipX) {
+    public Character(final TextureConfig textureConfig, final Vector2 position, final boolean flipX, final String name) {
         this.textureAtlas = new TextureAtlas(textureConfig.getTexturePath());
         this.stateRegionMap = new HashMap<>();
         textureConfig.getAnimConfigMap().forEach((state, animConfig) -> stateRegionMap.put(state,
@@ -59,6 +63,8 @@ public class Character implements Disposable {
         this.previousState = State.IDLE;
         this.flipX = flipX;
         this.canMove = true;
+        this.name = name;
+        this.bitmapFont = new BitmapFont(Gdx.files.internal("Skins/glassy/font-export.fnt"));
     }
 
     public void update(final float deltaTime) {
@@ -82,11 +88,13 @@ public class Character implements Disposable {
                 position.y,
                 flipX ? -textureSize.x : textureSize.x,
                 textureSize.y);
+        bitmapFont.draw(batch, name, position.x + (textureSize.x / 2), position.y);
     }
 
     @Override
     public void dispose() {
         textureAtlas.dispose();
+        bitmapFont.dispose();
     }
 
     public float getX() {

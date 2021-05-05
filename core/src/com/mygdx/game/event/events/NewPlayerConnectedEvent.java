@@ -24,6 +24,8 @@ public class NewPlayerConnectedEvent implements Event<NewPlayerConnectedEvent.Ne
         String id;
 
         CharacterConstants.CharacterType characterType;
+
+        String name;
     }
 
     @Override

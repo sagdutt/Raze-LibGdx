@@ -66,13 +66,14 @@ public class ArenaScreen implements Screen, EventHandler {
      * Initializes the local player. Notifies the server once the player is successfully created.
      * @param characterType
      */
-    public void initializePlayer(final CharacterConstants.CharacterType characterType) {
+    public void initializePlayer(final CharacterConstants.CharacterType characterType, final String characterName) {
         player = new Character(textureConfigFactory.getTextureConfigForCharacter(characterType),
-                new Vector2(camera.viewportWidth, camera.viewportHeight), false);
+                new Vector2(camera.viewportWidth, camera.viewportHeight), false, characterName);
         inputHandler = new ArenaInputHandler(player, background);
         try {
             JSONObject payload = new JSONObject();
             payload.put("character", characterType.name());
+            payload.put("name", characterName);
             socketIOClient.emit(SocketEventConstants.PLAYER_READY, payload);
         } catch (Exception e) {
             Gdx.app.log(AppConstants.APP_LOG_TAG, "Error while sending event to server", e);
@@ -212,7 +213,7 @@ public class ArenaScreen implements Screen, EventHandler {
                 Gdx.app.postRunnable(() ->
                         connectedPlayers.put(getPlayerPayload.getId(),
                                 new Character(textureConfigFactory.getTextureConfigForCharacter(getPlayerPayload.getCharacterType()),
-                                        getPlayerPayload.getPosition(), getPlayerPayload.isFlipX()))));
+                                        getPlayerPayload.getPosition(), getPlayerPayload.isFlipX(), getPlayerPayload.getName()))));
     }
 
     private void handlePlayerDisconnected(final PlayerDisconnectedEvent event) {
@@ -223,6 +224,6 @@ public class ArenaScreen implements Screen, EventHandler {
         Gdx.app.postRunnable(() ->
                 connectedPlayers.put(event.getPayload().getId(),
                         new Character(textureConfigFactory.getTextureConfigForCharacter(event.getPayload().getCharacterType()),
-                                new Vector2(camera.viewportWidth, camera.viewportHeight), false)));
+                                new Vector2(camera.viewportWidth, camera.viewportHeight), false, event.getPayload().getName())));
     }
 }

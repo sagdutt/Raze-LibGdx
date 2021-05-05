@@ -42,7 +42,8 @@ public class RazeGame extends Game implements EventHandler {
 		if (CharacterSelectedEvent.class == event.getClass()) {
 			ArenaScreen arenaScreen = appComponent.getArenaScreen();
 			this.setScreen(arenaScreen);
-			arenaScreen.initializePlayer(((CharacterSelectedEvent) event).getPayload());
+			CharacterSelectedEvent.CharacterSelectedPayload payload = ((CharacterSelectedEvent) event).getPayload();
+			arenaScreen.initializePlayer(payload.getCharacter(), payload.getName());
 		}
 	}
 }

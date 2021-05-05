@@ -119,11 +119,13 @@ public class SocketIOClient {
                     boolean flipX = playerInfo.getBoolean("flipX");
                     CharacterConstants.CharacterType characterType =
                             CharacterConstants.CharacterType.valueOf(playerInfo.getString("character"));
+                    String name = playerInfo.getString("name");
                     getPlayerPayloadList.add(GetPlayersEvent.GetPlayerPayload.builder()
                             .id(id)
                             .position(position)
                             .flipX(flipX)
                             .characterType(characterType)
+                            .name(name)
                             .build());
                 }
                 Gdx.app.log(AppConstants.SOCKET_IO_LOG_TAG, "GetPlayers succeeded");
@@ -158,11 +160,13 @@ public class SocketIOClient {
                 String id = data.getString("id");
                 CharacterConstants.CharacterType characterType =
                         CharacterConstants.CharacterType.valueOf(data.getString("character"));
+                String name = data.getString("name");
                 Gdx.app.log(AppConstants.SOCKET_IO_LOG_TAG, "New player connected. Player ID : " + id);
                 eventBus.publish(NewPlayerConnectedEvent.builder()
                         .newPlayerConnectedPayload(NewPlayerConnectedEvent.NewPlayerConnectedPayload.builder()
                                 .id(id)
                                 .characterType(characterType)
+                                .name(name)
                                 .build())
                         .build());
             } catch (Exception e) {
