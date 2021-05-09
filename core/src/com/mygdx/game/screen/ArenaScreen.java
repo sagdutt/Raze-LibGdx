@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.character.Character;
 import com.mygdx.game.client.SocketIOClient;
 import com.mygdx.game.constant.AppConstants;
-import com.mygdx.game.constant.CharacterConstants.CharacterType;
+import com.mygdx.game.constant.CharacterConstants;
 import com.mygdx.game.constant.SocketEventConstants;
 import com.mygdx.game.event.Event;
 import com.mygdx.game.event.EventBus;
@@ -60,6 +60,24 @@ public class ArenaScreen implements Screen, EventHandler {
         this.connectedPlayers = new HashMap<>();
         this.background = new Texture("Background/game_background_4.png"); //TODO : Refactor this
         eventBus.subscribe(this);
+    }
+
+    /**
+     * Initializes the local player. Notifies the server once the player is successfully created.
+     * @param characterType
+     */
+    public void initializePlayer(final CharacterConstants.CharacterType characterType, final String characterName) {
+        player = new Character(textureConfigFactory.getTextureConfigForCharacter(characterType),
+                new Vector2(camera.viewportWidth, camera.viewportHeight), false, characterName);
+        inputHandler = new ArenaInputHandler(player, background);
+        try {
+            JSONObject payload = new JSONObject();
+            payload.put("character", characterType.name());
+            payload.put("name", characterName);
+            socketIOClient.emit(SocketEventConstants.PLAYER_READY, payload);
+        } catch (Exception e) {
+            Gdx.app.log(AppConstants.APP_LOG_TAG, "Error while sending event to server", e);
+        }
     }
 
     @Override
@@ -157,8 +175,7 @@ public class ArenaScreen implements Screen, EventHandler {
 
     @Override
     public List<Class<?>> getSubscribedEventClasses() {
-        return Arrays.asList(SocketConnectedEvent.class,
-                NewPlayerConnectedEvent.class,
+        return Arrays.asList(NewPlayerConnectedEvent.class,
                 PlayerDisconnectedEvent.class,
                 GetPlayersEvent.class,
                 PlayerMovedEvent.class);
@@ -166,9 +183,7 @@ public class ArenaScreen implements Screen, EventHandler {
 
     @Override
     public void handleEvent(final Event<?> event) {
-        if (SocketConnectedEvent.class == event.getClass()) {
-            handleSocketConnected((SocketConnectedEvent) event);
-        } else if (NewPlayerConnectedEvent.class == event.getClass()) {
+        if (NewPlayerConnectedEvent.class == event.getClass()) {
             handleNewPlayerConnected((NewPlayerConnectedEvent) event);
         } else if (PlayerDisconnectedEvent.class == event.getClass()) {
             handlePlayerDisconnected((PlayerDisconnectedEvent) event);
@@ -197,8 +212,8 @@ public class ArenaScreen implements Screen, EventHandler {
         getPlayerPayloadList.forEach(getPlayerPayload ->
                 Gdx.app.postRunnable(() ->
                         connectedPlayers.put(getPlayerPayload.getId(),
-                                new Character(textureConfigFactory.getTextureConfigForCharacter(CharacterType.ELF_WARRIOR),
-                                        getPlayerPayload.getPosition(), getPlayerPayload.isFlipX()))));
+                                new Character(textureConfigFactory.getTextureConfigForCharacter(getPlayerPayload.getCharacterType()),
+                                        getPlayerPayload.getPosition(), getPlayerPayload.isFlipX(), getPlayerPayload.getName()))));
     }
 
     private void handlePlayerDisconnected(final PlayerDisconnectedEvent event) {
@@ -207,16 +222,8 @@ public class ArenaScreen implements Screen, EventHandler {
 
     private void handleNewPlayerConnected(final NewPlayerConnectedEvent event) {
         Gdx.app.postRunnable(() ->
-                connectedPlayers.put(event.getPayload(),
-                        new Character(textureConfigFactory.getTextureConfigForCharacter(CharacterType.ELF_WARRIOR),
-                                new Vector2(camera.viewportWidth, camera.viewportHeight), false)));
-    }
-
-    private void handleSocketConnected(final SocketConnectedEvent socketConnectedEvent) {
-        Gdx.app.postRunnable(() -> {
-            player = new Character(textureConfigFactory.getTextureConfigForCharacter(CharacterType.ELF_WARRIOR),
-                    new Vector2(camera.viewportWidth, camera.viewportHeight), false);
-            inputHandler = new ArenaInputHandler(player, background);
-        });
+                connectedPlayers.put(event.getPayload().getId(),
+                        new Character(textureConfigFactory.getTextureConfigForCharacter(event.getPayload().getCharacterType()),
+                                new Vector2(camera.viewportWidth, camera.viewportHeight), false, event.getPayload().getName())));
     }
 }

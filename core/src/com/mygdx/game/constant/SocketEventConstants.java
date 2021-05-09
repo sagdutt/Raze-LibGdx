@@ -16,6 +16,8 @@ public final class SocketEventConstants {
 
     public static final String PLAYER_MOVED = "playerMoved";
 
+    public static final String PLAYER_READY = "playerReady";
+
     private SocketEventConstants() {
     }
 }

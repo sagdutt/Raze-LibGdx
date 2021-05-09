@@ -16,6 +16,8 @@ public final class AppConstants {
 
     public static final String APP_LOG_TAG = APP_NAME;
 
+    public static final String CHARACTER_SELECT = "characterSelect";
+
     private AppConstants() {
     }
 }

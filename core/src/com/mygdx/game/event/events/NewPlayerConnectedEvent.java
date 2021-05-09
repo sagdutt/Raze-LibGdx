@@ -1,5 +1,6 @@
 package com.mygdx.game.event.events;
 
+import com.mygdx.game.constant.CharacterConstants;
 import com.mygdx.game.event.Event;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,13 +12,24 @@ import lombok.Value;
  */
 @Value
 @Builder
-public class NewPlayerConnectedEvent implements Event<String> {
+public class NewPlayerConnectedEvent implements Event<NewPlayerConnectedEvent.NewPlayerConnectedPayload> {
 
     @Getter(AccessLevel.PRIVATE)
-    String id;
+    NewPlayerConnectedPayload newPlayerConnectedPayload;
+
+    @Value
+    @Builder
+    public static class NewPlayerConnectedPayload {
+
+        String id;
+
+        CharacterConstants.CharacterType characterType;
+
+        String name;
+    }
 
     @Override
-    public String getPayload() {
-        return id;
+    public NewPlayerConnectedPayload getPayload() {
+        return newPlayerConnectedPayload;
     }
 }

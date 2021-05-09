@@ -1,6 +1,7 @@
 package com.mygdx.game.event.events;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.constant.CharacterConstants;
 import com.mygdx.game.event.Event;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,6 +29,10 @@ public class GetPlayersEvent implements Event<List<GetPlayersEvent.GetPlayerPayl
         Vector2 position;
 
         boolean flipX;
+
+        CharacterConstants.CharacterType characterType;
+
+        String name;
     }
 
     @Override

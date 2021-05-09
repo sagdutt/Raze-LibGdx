@@ -4,8 +4,6 @@ import com.mygdx.game.event.Event;
 import com.mygdx.game.event.EventBus;
 import com.mygdx.game.event.EventHandler;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.*;
 
 /**
