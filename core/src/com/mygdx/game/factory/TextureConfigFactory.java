@@ -56,7 +56,7 @@ public class TextureConfigFactory {
             case ELF_MAGE:
                 return ELF_MAGE_CONFIG;
             default:
-                throw new IllegalStateException("Unexpected value: " + characterType);
+                throw new IllegalArgumentException("Unexpected value: " + characterType);
         }
     }
 
