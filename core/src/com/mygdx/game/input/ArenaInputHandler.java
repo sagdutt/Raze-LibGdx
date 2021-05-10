@@ -29,7 +29,7 @@ public class ArenaInputHandler implements InputHandler {
 
     @Override
     public void handleInput(float deltaTime) {
-        if (Gdx.input.isTouched()) {
+        if (Gdx.input.justTouched()) {
             player.setState(State.ATTACKING);
             player.setCanMove(false);
             connectedPlayersRepository.getConnectedPlayers().forEach((id, character) -> {
