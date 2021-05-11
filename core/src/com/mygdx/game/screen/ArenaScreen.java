@@ -4,20 +4,18 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.character.Character;
 import com.mygdx.game.client.SocketIOClient;
-import com.mygdx.game.dto.CharacterReadyDto;
-import com.mygdx.game.dto.PlayerMovedDto;
 import com.mygdx.game.constant.AppConstants;
 import com.mygdx.game.constant.CharacterConstants;
 import com.mygdx.game.constant.SocketEventConstants;
-import com.mygdx.game.factory.CharacterConfigFactory;
-import com.mygdx.game.factory.TextureConfigFactory;
+import com.mygdx.game.dto.CharacterReadyDto;
+import com.mygdx.game.dto.PlayerMovedDto;
 import com.mygdx.game.input.ArenaInputHandler;
 import com.mygdx.game.input.InputHandler;
 import com.mygdx.game.repository.ConnectedPlayersRepository;
+import com.mygdx.game.repository.LocalPlayerRepository;
 import lombok.NonNull;
 
 import javax.inject.Inject;
@@ -32,13 +30,11 @@ public class ArenaScreen implements Screen {
 
     private final Camera camera;
 
-    private final TextureConfigFactory textureConfigFactory;
-
     private final SocketIOClient socketIOClient;
 
     private final ConnectedPlayersRepository connectedPlayersRepository;
 
-    private final CharacterConfigFactory characterConfigFactory;
+    private final LocalPlayerRepository localPlayerRepository;
 
     private final Texture background;
 
@@ -51,16 +47,14 @@ public class ArenaScreen implements Screen {
     @Inject
     public ArenaScreen(@NonNull final Batch batch,
                        @NonNull final Camera camera,
-                       @NonNull final TextureConfigFactory textureConfigFactory,
                        @NonNull final SocketIOClient socketIOClient,
                        @NonNull final ConnectedPlayersRepository connectedPlayersRepository,
-                       @NonNull final CharacterConfigFactory characterConfigFactory) {
+                       @NonNull final LocalPlayerRepository localPlayerRepository) {
         this.batch = batch;
         this.camera = camera;
-        this.textureConfigFactory = textureConfigFactory;
         this.socketIOClient = socketIOClient;
         this.connectedPlayersRepository = connectedPlayersRepository;
-        this.characterConfigFactory = characterConfigFactory;
+        this.localPlayerRepository = localPlayerRepository;
         this.background = new Texture("Background/game_background_4.png"); //TODO : Refactor this
     }
 
@@ -69,10 +63,8 @@ public class ArenaScreen implements Screen {
      * @param characterType
      */
     public void initializePlayer(final CharacterConstants.CharacterType characterType, final String characterName) {
-        player = new Character(textureConfigFactory.getTextureConfigForCharacter(characterType),
-                new Vector2(camera.viewportWidth, camera.viewportHeight), false, characterName,
-                characterConfigFactory.getCharacterConfigForCharacter(characterType));
-        inputHandler = new ArenaInputHandler(player, background, connectedPlayersRepository);
+        player = localPlayerRepository.initializePlayer(characterType, characterName);
+        inputHandler = new ArenaInputHandler(player, background, connectedPlayersRepository, socketIOClient);
         CharacterReadyDto dto = CharacterReadyDto.builder()
                 .name(characterName)
                 .character(characterType)

@@ -2,6 +2,7 @@ package com.mygdx.game.factory;
 
 import com.mygdx.game.constant.CharacterConstants;
 import com.mygdx.game.model.CharacterConfig;
+import com.mygdx.game.model.CharacterStats;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -18,6 +19,11 @@ public class CharacterConfigFactory {
             .attackAreaYOffset(0f)
             .attackAreaWidth(70f)
             .attackAreaHeight(100f)
+            .characterStats(CharacterStats.builder()
+                    .attack(30)
+                    .defense(20)
+                    .health(100)
+                    .build())
             .build();
 
     private static final CharacterConfig ELF_ARCHER_CONFIG = CharacterConfig.builder()
@@ -29,6 +35,11 @@ public class CharacterConfigFactory {
             .attackAreaYOffset(0f)
             .attackAreaWidth(180f)
             .attackAreaHeight(100f)
+            .characterStats(CharacterStats.builder()
+                    .attack(15)
+                    .defense(10)
+                    .health(60)
+                    .build())
             .build();
 
     private static final CharacterConfig ELF_MAGE_CONFIG = CharacterConfig.builder()
@@ -40,6 +51,11 @@ public class CharacterConfigFactory {
             .attackAreaYOffset(0f)
             .attackAreaWidth(150f)
             .attackAreaHeight(100f)
+            .characterStats(CharacterStats.builder()
+                    .attack(20)
+                    .defense(5)
+                    .health(80)
+                    .build())
             .build();
 
     @Inject

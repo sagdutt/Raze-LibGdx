@@ -31,6 +31,8 @@ public class SocketIOClient {
 
     private Socket socket;
 
+    private String socketId;
+
     @Inject
     public SocketIOClient(@NonNull final EventBus eventBus) {
         this.eventBus = eventBus;
@@ -79,7 +81,27 @@ public class SocketIOClient {
                 .on(SocketEventConstants.NEW_PLAYER_CONNECTED, getNewPlayerConnectedEventListener())
                 .on(SocketEventConstants.PLAYER_DISCONNECTED, getPlayerDisconnectedEventListener())
                 .on(SocketEventConstants.GET_PLAYERS, getGetPlayersEventListener())
-                .on(SocketEventConstants.PLAYER_MOVED, getPlayerMovedEventListener());
+                .on(SocketEventConstants.PLAYER_MOVED, getPlayerMovedEventListener())
+                .on(SocketEventConstants.TAKE_DAMAGE, getTakeDamageEventListener());
+    }
+
+    private Emitter.Listener getTakeDamageEventListener() {
+        return args -> {
+            JSONObject data = (JSONObject) args[0];
+            try {
+                String id = data.getString("id");
+                int damage = data.getInt("damage");
+                eventBus.publish(TakeDamageEvent.builder()
+                        .takeDamageEventPayload(TakeDamageEvent.TakeDamageEventPayload.builder()
+                                .id(id)
+                                .damage(damage)
+                                .localPlayer(id.equals(socketId))
+                                .build())
+                        .build());
+            } catch (Exception e) {
+                Gdx.app.error(AppConstants.SOCKET_IO_LOG_TAG, "Error while processing take damage", e);
+            }
+        };
     }
 
     private Emitter.Listener getPlayerMovedEventListener() {
@@ -181,6 +203,7 @@ public class SocketIOClient {
             try {
                 String id = data.getString("id");
                 Gdx.app.log(AppConstants.SOCKET_IO_LOG_TAG, "Socket ID : " + id);
+                socketId = id;
             } catch (Exception e) {
                 Gdx.app.error(AppConstants.SOCKET_IO_LOG_TAG, "Error while getting socket id", e);
             }

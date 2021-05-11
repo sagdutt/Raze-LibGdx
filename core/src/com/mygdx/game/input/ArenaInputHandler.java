@@ -5,8 +5,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.character.Character;
+import com.mygdx.game.client.SocketIOClient;
 import com.mygdx.game.constant.AppConstants;
+import com.mygdx.game.constant.SocketEventConstants;
 import com.mygdx.game.constant.State;
+import com.mygdx.game.dto.PlayerDamagedDto;
 import com.mygdx.game.repository.ConnectedPlayersRepository;
 
 import static com.mygdx.game.constant.CharacterConstants.PLAYER_MOVEMENT_SPEED;
@@ -19,12 +22,16 @@ public class ArenaInputHandler implements InputHandler {
 
     private final ConnectedPlayersRepository connectedPlayersRepository;
 
+    private final SocketIOClient socketIOClient;
+
     public ArenaInputHandler(final Character player,
                              final Texture background,
-                             final ConnectedPlayersRepository connectedPlayersRepository) {
+                             final ConnectedPlayersRepository connectedPlayersRepository,
+                             final SocketIOClient socketIOClient) {
         this.player = player;
         this.background = background;
         this.connectedPlayersRepository = connectedPlayersRepository;
+        this.socketIOClient = socketIOClient;
     }
 
     @Override
@@ -36,6 +43,12 @@ public class ArenaInputHandler implements InputHandler {
                 if (character.getBounds().overlaps(player.getAttackArea())) {
                     Gdx.app.log(AppConstants.APP_LOG_TAG, String.format("%s attacked %s", player.getName(), character.getName()));
                     // TODO: Add actual attack logic
+                    character.applyDamage(player.getCurrentStats().getAttack());
+                    PlayerDamagedDto playerDamagedDto = PlayerDamagedDto.builder()
+                            .id(id)
+                            .damage(player.getCurrentStats().getAttack())
+                            .build();
+                    socketIOClient.emit(SocketEventConstants.PLAYER_DAMAGED, playerDamagedDto.toJsonObject());
                 }
             });
         }
