@@ -20,6 +20,7 @@ import com.mygdx.game.event.events.CharacterSelectedEvent;
 import com.mygdx.game.event.events.SocketConnectedEvent;
 import com.mygdx.game.factory.TextureConfigFactory;
 import com.mygdx.game.model.AnimConfig;
+import com.mygdx.game.repository.LocalPlayerRepository;
 import lombok.NonNull;
 
 import javax.inject.Inject;
@@ -39,6 +40,8 @@ public class CharacterSelectScreen implements Screen, EventHandler {
 
     private final Map<CharacterConstants.CharacterType, TextureRegion> characterAnimMap;
 
+    private final LocalPlayerRepository localPlayerRepository;
+
     private Cell<Image> characterImageCell;
 
     private Cell<TextField> characterNameCell;
@@ -49,7 +52,8 @@ public class CharacterSelectScreen implements Screen, EventHandler {
     public CharacterSelectScreen(@NonNull final EventBus eventBus,
                                  @NonNull final Stage stage,
                                  @Named(AppConstants.CHARACTER_SELECT) @NonNull final Skin skin,
-                                 @NonNull final TextureConfigFactory textureConfigFactory) {
+                                 @NonNull final TextureConfigFactory textureConfigFactory,
+                                 @NonNull final LocalPlayerRepository localPlayerRepository) {
         this.eventBus = eventBus;
         this.stage = stage;
         this.skin = skin;
@@ -59,6 +63,7 @@ public class CharacterSelectScreen implements Screen, EventHandler {
             AnimConfig animConfig = textureConfig.getAnimConfigMap().get(State.IDLE);
             characterAnimMap.put(characterType, textureAtlas.findRegions(animConfig.getName()).get(0));
         });
+        this.localPlayerRepository = localPlayerRepository;
         eventBus.subscribe(this);
     }
 
@@ -105,6 +110,8 @@ public class CharacterSelectScreen implements Screen, EventHandler {
                 if (Objects.isNull(characterNameCell.getActor().getText()) || characterNameCell.getActor().getText().isEmpty()) {
                     Gdx.app.log(AppConstants.APP_LOG_TAG, "Must enter name"); // TODO : Popup error message
                 } else {
+                    localPlayerRepository.initializePlayer(CharacterConstants.CharacterType.values()[currentCharacterIndex],
+                            characterNameCell.getActor().getText());
                     eventBus.publish(CharacterSelectedEvent.builder()
                             .characterSelectedPayload(CharacterSelectedEvent.CharacterSelectedPayload.builder()
                                     .character(CharacterConstants.CharacterType.values()[currentCharacterIndex])

@@ -11,6 +11,7 @@ import com.mygdx.game.event.EventHandler;
 import com.mygdx.game.event.events.TakeDamageEvent;
 import com.mygdx.game.factory.CharacterConfigFactory;
 import com.mygdx.game.factory.TextureConfigFactory;
+import lombok.Getter;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -28,6 +29,7 @@ public class LocalPlayerRepository implements EventHandler {
 
     private final CharacterConfigFactory characterConfigFactory;
 
+    @Getter
     private Character player;
 
     @Inject
@@ -42,7 +44,8 @@ public class LocalPlayerRepository implements EventHandler {
     public Character initializePlayer(final CharacterConstants.CharacterType characterType, final String characterName) {
         player = new Character(textureConfigFactory.getTextureConfigForCharacter(characterType),
                 new Vector2(NEW_PLAYER_X, NEW_PLAYER_Y), false, characterName,
-                characterConfigFactory.getCharacterConfigForCharacter(characterType));
+                characterConfigFactory.getCharacterConfigForCharacter(characterType),
+                characterType);
         return player;
     }
 

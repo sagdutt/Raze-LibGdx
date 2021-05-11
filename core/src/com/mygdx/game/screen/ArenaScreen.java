@@ -58,20 +58,6 @@ public class ArenaScreen implements Screen {
         this.background = new Texture("Background/game_background_4.png"); //TODO : Refactor this
     }
 
-    /**
-     * Initializes the local player. Notifies the server once the player is successfully created.
-     * @param characterType
-     */
-    public void initializePlayer(final CharacterConstants.CharacterType characterType, final String characterName) {
-        player = localPlayerRepository.initializePlayer(characterType, characterName);
-        inputHandler = new ArenaInputHandler(player, background, connectedPlayersRepository, socketIOClient);
-        CharacterReadyDto dto = CharacterReadyDto.builder()
-                .name(characterName)
-                .character(characterType)
-                .build();
-        socketIOClient.emit(SocketEventConstants.PLAYER_READY, dto.toJsonObject());
-    }
-
     @Override
     public void render(float delta) {
         ScreenUtils.clear(1, 1, 1, 1);
@@ -133,6 +119,16 @@ public class ArenaScreen implements Screen {
         }
     }
 
+    private void initializePlayer() {
+        player = localPlayerRepository.getPlayer();
+        inputHandler = new ArenaInputHandler(player, background, connectedPlayersRepository, socketIOClient);
+        CharacterReadyDto dto = CharacterReadyDto.builder()
+                .name(player.getName())
+                .character(player.getCharacterType())
+                .build();
+        socketIOClient.emit(SocketEventConstants.PLAYER_READY, dto.toJsonObject());
+    }
+
     @Override
     public void dispose() {
         player.dispose();
@@ -144,6 +140,7 @@ public class ArenaScreen implements Screen {
 
     @Override
     public void show() {
+        initializePlayer();
     }
 
     @Override

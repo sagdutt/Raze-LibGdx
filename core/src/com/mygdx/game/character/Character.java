@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.constant.AppConstants;
+import com.mygdx.game.constant.CharacterConstants;
 import com.mygdx.game.constant.State;
 import com.mygdx.game.model.CharacterConfig;
 import com.mygdx.game.model.CharacterStats;
@@ -26,6 +27,9 @@ public class Character implements Disposable {
 
     @Getter
     private final CharacterStats currentStats;
+
+    @Getter
+    private final CharacterConstants.CharacterType characterType;
 
     @Getter
     private final String name;
@@ -64,7 +68,8 @@ public class Character implements Disposable {
                      final Vector2 position,
                      final boolean flipX,
                      final String name,
-                     final CharacterConfig characterConfig) {
+                     final CharacterConfig characterConfig,
+                     final CharacterConstants.CharacterType characterType) {
         this.textureAtlas = new TextureAtlas(textureConfig.getTexturePath());
         this.stateRegionMap = new HashMap<>();
         textureConfig.getAnimConfigMap().forEach((state, animConfig) -> stateRegionMap.put(state,
@@ -91,6 +96,7 @@ public class Character implements Disposable {
                 .attack(characterConfig.getCharacterStats().getAttack())
                 .defense(characterConfig.getCharacterStats().getDefense())
                 .build();
+        this.characterType = characterType;
     }
 
     public void update(final float deltaTime) {

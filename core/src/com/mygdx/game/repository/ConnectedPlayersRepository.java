@@ -96,7 +96,8 @@ public class ConnectedPlayersRepository implements EventHandler {
                         connectedPlayers.put(getPlayerPayload.getId(),
                                 new Character(textureConfigFactory.getTextureConfigForCharacter(getPlayerPayload.getCharacterType()),
                                         getPlayerPayload.getPosition(), getPlayerPayload.isFlipX(), getPlayerPayload.getName(),
-                                        characterConfigFactory.getCharacterConfigForCharacter(getPlayerPayload.getCharacterType())))));
+                                        characterConfigFactory.getCharacterConfigForCharacter(getPlayerPayload.getCharacterType()),
+                                        getPlayerPayload.getCharacterType()))));
     }
 
     private void handlePlayerDisconnected(final PlayerDisconnectedEvent event) {
@@ -113,6 +114,7 @@ public class ConnectedPlayersRepository implements EventHandler {
                 connectedPlayers.put(event.getPayload().getId(),
                         new Character(textureConfigFactory.getTextureConfigForCharacter(event.getPayload().getCharacterType()),
                                 new Vector2(NEW_PLAYER_X, NEW_PLAYER_Y), false, event.getPayload().getName(),
-                                characterConfigFactory.getCharacterConfigForCharacter(event.getPayload().getCharacterType()))));
+                                characterConfigFactory.getCharacterConfigForCharacter(event.getPayload().getCharacterType()),
+                                event.getPayload().getCharacterType())));
     }
 }
