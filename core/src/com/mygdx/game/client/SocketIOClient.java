@@ -78,11 +78,11 @@ public class SocketIOClient {
                 .on(SocketEventConstants.SOCKET_ID, getSocketIdEventListener())
                 .on(SocketEventConstants.NEW_PLAYER_CONNECTED, getNewPlayerConnectedEventListener())
                 .on(SocketEventConstants.PLAYER_DISCONNECTED, getPlayerDisconnectedEventListener())
-                .on(SocketEventConstants.GET_PLAYERS, getGetPlayersEventListener())
-                .on(SocketEventConstants.PLAYER_MOVED, getPlayerMovedEventListener());
+                .on(SocketEventConstants.GET_PLAYERS, getGetExistingPlayersEventListener())
+                .on(SocketEventConstants.PLAYER_MOVED, getPlayerUpdatedEventListener());
     }
 
-    private Emitter.Listener getPlayerMovedEventListener() {
+    private Emitter.Listener getPlayerUpdatedEventListener() {
         return args -> {
             JSONObject data = (JSONObject) args[0];
             try {
@@ -106,7 +106,7 @@ public class SocketIOClient {
         };
     }
 
-    private Emitter.Listener getGetPlayersEventListener() {
+    private Emitter.Listener getGetExistingPlayersEventListener() {
         return args -> {
             JSONArray playerInfoList = (JSONArray) args[0];
             try {
