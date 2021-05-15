@@ -5,8 +5,11 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
+import com.mygdx.game.constant.AppConstants;
+import com.mygdx.game.constant.CharacterConstants;
 import com.mygdx.game.constant.State;
 import com.mygdx.game.model.CharacterConfig;
+import com.mygdx.game.model.CharacterStats;
 import com.mygdx.game.model.TextureConfig;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +24,12 @@ public class Character implements Disposable {
     private final Map<State, Animation<TextureRegion>> stateRegionMap;
 
     private final CharacterConfig characterConfig;
+
+    @Getter
+    private final CharacterStats currentStats;
+
+    @Getter
+    private final CharacterConstants.CharacterType characterType;
 
     @Getter
     private final String name;
@@ -59,7 +68,8 @@ public class Character implements Disposable {
                      final Vector2 position,
                      final boolean flipX,
                      final String name,
-                     final CharacterConfig characterConfig) {
+                     final CharacterConfig characterConfig,
+                     final CharacterConstants.CharacterType characterType) {
         this.textureAtlas = new TextureAtlas(textureConfig.getTexturePath());
         this.stateRegionMap = new HashMap<>();
         textureConfig.getAnimConfigMap().forEach((state, animConfig) -> stateRegionMap.put(state,
@@ -81,9 +91,19 @@ public class Character implements Disposable {
         this.name = name;
         this.bitmapFont = new BitmapFont(Gdx.files.internal("Skins/glassy/font-export.fnt"));
         this.characterConfig = characterConfig;
+        this.currentStats = CharacterStats.builder()
+                .health(characterConfig.getCharacterStats().getHealth())
+                .attack(characterConfig.getCharacterStats().getAttack())
+                .defense(characterConfig.getCharacterStats().getDefense())
+                .build();
+        this.characterType = characterType;
     }
 
     public void update(final float deltaTime) {
+        if (currentStats.getHealth() <= 0) {
+            state = State.DEAD;
+            canMove = false;
+        }
         bounds.setX(position.x + characterConfig.getBoundsXOffset());
         bounds.setY(position.y + characterConfig.getBoundsYOffset());
 
@@ -102,7 +122,7 @@ public class Character implements Disposable {
     }
 
     public void draw(final Batch batch) {
-        batch.draw(stateRegionMap.get(state).getKeyFrame(elapsedTime, !state.equals(State.ATTACKING)),
+        batch.draw(stateRegionMap.get(state).getKeyFrame(elapsedTime, !state.equals(State.ATTACKING) && !state.equals(State.DEAD)),
                 flipX ? position.x + textureSize.x : position.x,
                 position.y,
                 flipX ? -textureSize.x : textureSize.x,
@@ -114,5 +134,14 @@ public class Character implements Disposable {
     public void dispose() {
         textureAtlas.dispose();
         bitmapFont.dispose();
+    }
+
+    public void applyDamage(final int damage) {
+        int actualDamage = damage - characterConfig.getCharacterStats().getDefense()/2;
+        if (actualDamage > 0) {
+            int healthAfterTakingDamage = currentStats.getHealth() - actualDamage;
+            currentStats.setHealth(healthAfterTakingDamage);
+            Gdx.app.log(AppConstants.APP_LOG_TAG, name + " remaining health: " + healthAfterTakingDamage);
+        }
     }
 }

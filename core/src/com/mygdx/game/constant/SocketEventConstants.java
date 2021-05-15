@@ -18,6 +18,10 @@ public final class SocketEventConstants {
 
     public static final String PLAYER_READY = "playerReady";
 
+    public static final String PLAYER_DAMAGED = "playerDamaged";
+
+    public static final String TAKE_DAMAGE = "takeDamage";
+
     private SocketEventConstants() {
     }
 }

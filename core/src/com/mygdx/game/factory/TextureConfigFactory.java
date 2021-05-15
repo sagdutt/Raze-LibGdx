@@ -20,7 +20,8 @@ public class TextureConfigFactory {
             .animConfigMap(new FluentHashMap<State, AnimConfig>()
                     .withEntry(State.IDLE, AnimConfig.builder().name("Elf_02__IDLE").frameRate(1/25f).build())
                     .withEntry(State.MOVING, AnimConfig.builder().name("Elf_02__RUN").frameRate(1/25f).build())
-                    .withEntry(State.ATTACKING, AnimConfig.builder().name("Elf_02__ATTACK").frameRate(1/25f).build()))
+                    .withEntry(State.ATTACKING, AnimConfig.builder().name("Elf_02__ATTACK").frameRate(1/25f).build())
+                    .withEntry(State.DEAD, AnimConfig.builder().name("Elf_02__DIE").frameRate(1/25f).build()))
             .build();
 
     private static final TextureConfig ELF_ARCHER_CONFIG = TextureConfig.builder()
@@ -30,7 +31,8 @@ public class TextureConfigFactory {
             .animConfigMap(new FluentHashMap<State, AnimConfig>()
                     .withEntry(State.IDLE, AnimConfig.builder().name("Elf_01__IDLE").frameRate(1/25f).build())
                     .withEntry(State.MOVING, AnimConfig.builder().name("Elf_01__RUN").frameRate(1/25f).build())
-                    .withEntry(State.ATTACKING, AnimConfig.builder().name("Elf_01__ATTACK").frameRate(1/25f).build()))
+                    .withEntry(State.ATTACKING, AnimConfig.builder().name("Elf_01__ATTACK").frameRate(1/25f).build())
+                    .withEntry(State.DEAD, AnimConfig.builder().name("Elf_01__DIE").frameRate(1/25f).build()))
             .build();
 
     private static final TextureConfig ELF_MAGE_CONFIG = TextureConfig.builder()
@@ -40,7 +42,8 @@ public class TextureConfigFactory {
             .animConfigMap(new FluentHashMap<State, AnimConfig>()
                     .withEntry(State.IDLE, AnimConfig.builder().name("Elf_03__IDLE").frameRate(1/25f).build())
                     .withEntry(State.MOVING, AnimConfig.builder().name("Elf_03__RUN").frameRate(1/25f).build())
-                    .withEntry(State.ATTACKING, AnimConfig.builder().name("Elf_03__ATTACK").frameRate(1/25f).build()))
+                    .withEntry(State.ATTACKING, AnimConfig.builder().name("Elf_03__ATTACK").frameRate(1/25f).build())
+                    .withEntry(State.DEAD, AnimConfig.builder().name("Elf_03__DIE").frameRate(1/25f).build()))
             .build();
 
     @Inject

@@ -22,4 +22,6 @@ public class CharacterConfig {
     float attackAreaWidth;
 
     float attackAreaHeight;
+
+    CharacterStats characterStats;
 }

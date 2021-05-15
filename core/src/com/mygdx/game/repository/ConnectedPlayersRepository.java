@@ -3,13 +3,11 @@ package com.mygdx.game.repository;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.character.Character;
+import com.mygdx.game.constant.State;
 import com.mygdx.game.event.Event;
 import com.mygdx.game.event.EventBus;
 import com.mygdx.game.event.EventHandler;
-import com.mygdx.game.event.events.GetPlayersEvent;
-import com.mygdx.game.event.events.NewPlayerConnectedEvent;
-import com.mygdx.game.event.events.PlayerDisconnectedEvent;
-import com.mygdx.game.event.events.PlayerMovedEvent;
+import com.mygdx.game.event.events.*;
 import com.mygdx.game.factory.CharacterConfigFactory;
 import com.mygdx.game.factory.TextureConfigFactory;
 import lombok.Getter;
@@ -50,7 +48,8 @@ public class ConnectedPlayersRepository implements EventHandler {
         return Arrays.asList(NewPlayerConnectedEvent.class,
                 PlayerDisconnectedEvent.class,
                 GetPlayersEvent.class,
-                PlayerMovedEvent.class);
+                PlayerMovedEvent.class,
+                TakeDamageEvent.class);
     }
 
     @Override
@@ -63,6 +62,17 @@ public class ConnectedPlayersRepository implements EventHandler {
             handleGetPlayers((GetPlayersEvent) event);
         } else if (PlayerMovedEvent.class == event.getClass()) {
             handlePlayerMoved((PlayerMovedEvent) event);
+        } else if (TakeDamageEvent.class == event.getClass()) {
+            handleTakeDamage((TakeDamageEvent) event);
+        }
+    }
+
+    private void handleTakeDamage(final TakeDamageEvent event) {
+        TakeDamageEvent.TakeDamageEventPayload payload = event.getPayload();
+        if (!payload.isLocalPlayer()) {
+            if (connectedPlayers.containsKey(payload.getId())) {
+                connectedPlayers.get(payload.getId()).applyDamage(payload.getDamage());
+            }
         }
     }
 
@@ -86,11 +96,17 @@ public class ConnectedPlayersRepository implements EventHandler {
                         connectedPlayers.put(getPlayerPayload.getId(),
                                 new Character(textureConfigFactory.getTextureConfigForCharacter(getPlayerPayload.getCharacterType()),
                                         getPlayerPayload.getPosition(), getPlayerPayload.isFlipX(), getPlayerPayload.getName(),
-                                        characterConfigFactory.getCharacterConfigForCharacter(getPlayerPayload.getCharacterType())))));
+                                        characterConfigFactory.getCharacterConfigForCharacter(getPlayerPayload.getCharacterType()),
+                                        getPlayerPayload.getCharacterType()))));
     }
 
     private void handlePlayerDisconnected(final PlayerDisconnectedEvent event) {
-        connectedPlayers.remove(event.getPayload());
+        if (connectedPlayers.containsKey(event.getPayload())) {
+            Gdx.app.postRunnable(() -> {
+                connectedPlayers.get(event.getPayload()).dispose();
+                connectedPlayers.remove(event.getPayload());
+            });
+        }
     }
 
     private void handleNewPlayerConnected(final NewPlayerConnectedEvent event) {
@@ -98,6 +114,7 @@ public class ConnectedPlayersRepository implements EventHandler {
                 connectedPlayers.put(event.getPayload().getId(),
                         new Character(textureConfigFactory.getTextureConfigForCharacter(event.getPayload().getCharacterType()),
                                 new Vector2(NEW_PLAYER_X, NEW_PLAYER_Y), false, event.getPayload().getName(),
-                                characterConfigFactory.getCharacterConfigForCharacter(event.getPayload().getCharacterType()))));
+                                characterConfigFactory.getCharacterConfigForCharacter(event.getPayload().getCharacterType()),
+                                event.getPayload().getCharacterType())));
     }
 }
