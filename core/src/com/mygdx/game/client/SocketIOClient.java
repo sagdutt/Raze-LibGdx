@@ -92,8 +92,8 @@ public class SocketIOClient {
                 boolean flipX = data.getBoolean("flipX");
                 State state = State.valueOf(data.getString("state"));
 
-                eventBus.publish(PlayerMovedEvent.builder()
-                        .playerMovedPayload(PlayerMovedEvent.PlayerMovedPayload.builder()
+                eventBus.publish(PlayerUpdatedEvent.builder()
+                        .playerUpdatedPayload(PlayerUpdatedEvent.PlayerUpdatedPayload.builder()
                                 .id(id)
                                 .position(new Vector2(x, y))
                                 .flipX(flipX)
@@ -101,7 +101,7 @@ public class SocketIOClient {
                                 .build())
                         .build());
             } catch (Exception e) {
-                Gdx.app.error(AppConstants.SOCKET_IO_LOG_TAG, "Error while processing player moved", e);
+                Gdx.app.error(AppConstants.SOCKET_IO_LOG_TAG, "Error while processing player updated", e);
             }
         };
     }
@@ -110,21 +110,21 @@ public class SocketIOClient {
         return args -> {
             JSONArray playerInfoList = (JSONArray) args[0];
             try {
-                List<GetPlayersEvent.GetPlayerPayload> getPlayerPayloadList = new ArrayList<>();
+                List<GetExistingPlayersEvent.GetPlayerPayload> getPlayerPayloadList = new ArrayList<>();
                 for (int i = 0; i < playerInfoList.length(); i++) {
                     JSONObject playerInfo = (JSONObject) playerInfoList.get(i);
                     String id = playerInfo.getString("id");
                     Vector2 position = new Vector2(((Double) playerInfo.getDouble("x")).floatValue(),
                             ((Double) playerInfo.getDouble("y")).floatValue());
                     boolean flipX = playerInfo.getBoolean("flipX");
-                    getPlayerPayloadList.add(GetPlayersEvent.GetPlayerPayload.builder()
+                    getPlayerPayloadList.add(GetExistingPlayersEvent.GetPlayerPayload.builder()
                             .id(id)
                             .position(position)
                             .flipX(flipX)
                             .build());
                 }
-                Gdx.app.log(AppConstants.SOCKET_IO_LOG_TAG, "GetPlayers succeeded");
-                eventBus.publish(GetPlayersEvent.builder()
+                Gdx.app.log(AppConstants.SOCKET_IO_LOG_TAG, "GetExistingPlayers succeeded");
+                eventBus.publish(GetExistingPlayersEvent.builder()
                         .getPlayerPayloadList(getPlayerPayloadList)
                         .build());
             } catch (Exception e) {

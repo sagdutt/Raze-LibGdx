@@ -13,14 +13,14 @@ import lombok.Value;
  */
 @Value
 @Builder
-public class PlayerMovedEvent implements Event<PlayerMovedEvent.PlayerMovedPayload> {
+public class PlayerUpdatedEvent implements Event<PlayerUpdatedEvent.PlayerUpdatedPayload> {
 
     @Getter(AccessLevel.PRIVATE)
-    PlayerMovedPayload playerMovedPayload;
+    PlayerUpdatedPayload playerUpdatedPayload;
 
     @Value
     @Builder
-    public static class PlayerMovedPayload {
+    public static class PlayerUpdatedPayload {
         String id;
 
         Vector2 position;
@@ -31,7 +31,7 @@ public class PlayerMovedEvent implements Event<PlayerMovedEvent.PlayerMovedPaylo
     }
 
     @Override
-    public PlayerMovedPayload getPayload() {
-        return playerMovedPayload;
+    public PlayerUpdatedPayload getPayload() {
+        return playerMUpdatedPayload;
     }
 }

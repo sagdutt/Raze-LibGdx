@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Value
 @Builder
-public class GetPlayersEvent implements Event<List<GetPlayersEvent.GetPlayerPayload>> {
+public class GetExistingPlayersEvent implements Event<List<GetExistingPlayersEvent.GetPlayerPayload>> {
 
     @Getter(AccessLevel.PRIVATE)
     List<GetPlayerPayload> getPlayerPayloadList;

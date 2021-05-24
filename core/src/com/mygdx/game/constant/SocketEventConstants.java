@@ -12,9 +12,9 @@ public final class SocketEventConstants {
 
     public static final String PLAYER_DISCONNECTED = "playerDisconnected";
 
-    public static final String GET_PLAYERS = "getPlayers";
+    public static final String GET_PLAYERS = "getExistingPlayers";
 
-    public static final String PLAYER_MOVED = "playerMoved";
+    public static final String PLAYER_MOVED = "playerUpdated";
 
     private SocketEventConstants() {
     }

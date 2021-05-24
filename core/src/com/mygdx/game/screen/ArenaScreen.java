@@ -160,8 +160,8 @@ public class ArenaScreen implements Screen, EventHandler {
         return Arrays.asList(SocketConnectedEvent.class,
                 NewPlayerConnectedEvent.class,
                 PlayerDisconnectedEvent.class,
-                GetPlayersEvent.class,
-                PlayerMovedEvent.class);
+                GetExistingPlayersEvent.class,
+                PlayerUpdatedEvent.class);
     }
 
     @Override
@@ -172,28 +172,28 @@ public class ArenaScreen implements Screen, EventHandler {
             handleNewPlayerConnected((NewPlayerConnectedEvent) event);
         } else if (PlayerDisconnectedEvent.class == event.getClass()) {
             handlePlayerDisconnected((PlayerDisconnectedEvent) event);
-        } else if (GetPlayersEvent.class == event.getClass()) {
-            handleGetPlayers((GetPlayersEvent) event);
-        } else if (PlayerMovedEvent.class == event.getClass()) {
-            handlePlayerMoved((PlayerMovedEvent) event);
+        } else if (GetExistingPlayersEvent.class == event.getClass()) {
+            handleGetExistingPlayers((GetExistingPlayersEvent) event);
+        } else if (PlayerUpdatedEvent.class == event.getClass()) {
+            handlePlayerUpdated((PlayerUpdatedEvent) event);
         }
     }
 
-    private void handlePlayerMoved(final PlayerMovedEvent event) {
-        PlayerMovedEvent.PlayerMovedPayload playerMovedPayload = event.getPayload();
-        if (connectedPlayers.containsKey(playerMovedPayload.getId())) {
-            Character otherPlayer = connectedPlayers.get(playerMovedPayload.getId());
-            otherPlayer.setX(playerMovedPayload.getPosition().x);
-            otherPlayer.setY(playerMovedPayload.getPosition().y);
-            otherPlayer.setFlipX(playerMovedPayload.isFlipX());
+    private void handlePlayerUpdated(final PlayerUpdatedEvent event) {
+        PlayerUpdatedEvent.PlayerUpdatedPayload playerUpdatedPayload = event.getPayload();
+        if (connectedPlayers.containsKey(playerUpdatedPayload.getId())) {
+            Character otherPlayer = connectedPlayers.get(playerUpdatedPayload.getId());
+            otherPlayer.setX(playerUpdatedPayload.getPosition().x);
+            otherPlayer.setY(playerUpdatedPayload.getPosition().y);
+            otherPlayer.setFlipX(playerUpdatedPayload.isFlipX());
             if (otherPlayer.isCanMove()) {
-                otherPlayer.setState(playerMovedPayload.getState());
+                otherPlayer.setState(playerUpdatedPayload.getState());
             }
         }
     }
 
-    private void handleGetPlayers(final GetPlayersEvent event) {
-        List<GetPlayersEvent.GetPlayerPayload> getPlayerPayloadList = event.getPayload();
+    private void handleGetExistingPlayers(final GetExistingPlayersEvent event) {
+        List<GetExistingPlayersEvent.GetPlayerPayload> getPlayerPayloadList = event.getPayload();
         getPlayerPayloadList.forEach(getPlayerPayload ->
                 Gdx.app.postRunnable(() ->
                         connectedPlayers.put(getPlayerPayload.getId(),
